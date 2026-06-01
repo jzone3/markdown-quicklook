@@ -1,304 +1,125 @@
 # Markdown QuickLook
 
-Press the **spacebar** on a Markdown file in Finder and see it **rendered** —
-headings, native tables, code blocks, task lists, the works — instead of raw
-text.
+Markdown QuickLook is a macOS Quick Look extension that renders `.md` files when you press **spacebar** in Finder.
 
-macOS Quick Look shows `.md` files as plain text out of the box. **Markdown
-QuickLook** is a small, open-source [Quick Look Preview Extension](https://developer.apple.com/documentation/quicklook/qlpreviewingcontroller)
-that renders Markdown to a native AppKit preview right in the spacebar preview.
+It supports headings, lists, task lists, inline formatting, code blocks, blockquotes, and native AppKit-rendered tables.
 
 ![Rendered Markdown preview — headings, lists, task list](docs/screenshot-light.png)
-![Rendered Markdown preview — syntax-highlighted code and a GFM table](docs/screenshot-code-table.png)
+![Rendered Markdown preview — code and a GFM table](docs/screenshot-code-table.png)
 
-## Quick start (how to do it)
+## Recommended install
 
-End-to-end, from a clean Mac to a rendered spacebar preview:
+The easiest way to install this is to ask **Devin** or another local coding agent to do it for you.
+
+Quick Look extensions require a few Mac-specific steps that agents are good at handling:
+
+- generating the Xcode project with XcodeGen
+- building/signing the app and extension
+- copying the app to `~/Applications`
+- registering/enabling the Quick Look extension
+- resetting Quick Look caches
+- testing the preview with `qlmanage`
+
+Give your agent this file:
+
+```text
+agent-instructions/INSTALL.md
+```
+
+Example prompt:
+
+```text
+Clone https://github.com/jzone3/markdown-quicklook and follow agent-instructions/INSTALL.md to install and test the Quick Look extension.
+```
+
+## Manual install
+
+If you want to install manually:
 
 ```bash
-# 1. Get the code
 git clone https://github.com/jzone3/markdown-quicklook.git
 cd markdown-quicklook
-
-# 2. Generate the Xcode project (one-time tool install)
 brew install xcodegen
 xcodegen generate
-
-# 3. Open it in Xcode
 open MarkdownQuickLook.xcodeproj
 ```
 
-4. In Xcode, set a **signing Team** on **both** targets (`MarkdownQuickLook` and
-   `QuickLookExtension`): select each target → **Signing & Capabilities** → pick
-   your Team (a free personal Apple ID is fine — choose *Sign to Run Locally* if
-   you have no team).
-5. Press **⌘R** to **Build & Run** the host app once. This registers the Markdown
-   file type and the extension with macOS.
-6. **Enable the extension:** System Settings → **General → Login Items &
-   Extensions → Quick Look** → turn on **Markdown Preview**. (Path differs by
-   macOS version — see [Enable the extension](#enable-the-extension). The app also
-   has an *Open Extensions Settings* button.)
-7. In Finder, select any `.md` file and press **spacebar** — you should see it
-   rendered.
+Then in Xcode:
 
-Stuck? Jump to [Troubleshooting](#troubleshooting). Want details on each step?
-See [Build & install](#build--install) below.
+1. Select the `MarkdownQuickLook` target and set your signing Team.
+2. Select the `QuickLookExtension` target and set the same signing Team.
+3. Build and run the `MarkdownQuickLook` scheme once.
+4. Open System Settings → General → Login Items & Extensions → Quick Look.
+5. Enable **Markdown Preview**.
+6. Select a `.md` file in Finder and press **spacebar**.
 
----
+If the preview does not update:
+
+```bash
+qlmanage -r
+qlmanage -r cache
+```
 
 ## Features
 
-- **GitHub-flavored Markdown** via Apple's [swift-markdown](https://github.com/swiftlang/swift-markdown)
-  (cmark-gfm): headings, **bold**/*italic*/~~strike~~, inline & fenced code,
-  ordered/unordered/nested lists, **task lists**, blockquotes, thematic breaks,
-  links, images, and **GFM tables with column alignment**.
-- **Native Quick Look preview:** the extension renders to AppKit `NSTextView`
-  content, including real `NSTextTable` table cells, instead of relying on
-  WebKit inside the Quick Look sandbox.
-- **HTML renderer and CLI:** the shared `MarkdownRenderer` package can still
-  render self-contained GitHub-styled HTML with [github-markdown-css](https://github.com/sindresorhus/github-markdown-css)
-  and [highlight.js](https://github.com/highlightjs/highlight.js) via the `mdql`
-  CLI or host app preview.
-- **Sandbox-friendly:** the Quick Look extension does not require network access.
-- **Security-first:** raw HTML in a `.md` file is escaped by default (no
-  `<script>` injection); `javascript:` URLs are neutralized.
-- **Shared, testable core:** the renderer is a UI-free Swift package that builds
-  and is unit-tested on Linux and macOS. Includes a tiny `mdql` CLI.
+- Native macOS Quick Look preview extension
+- Headings, paragraphs, blockquotes, lists, task lists, links, inline code, bold, italic, strikethrough
+- Native AppKit table rendering with `NSTextTable`
+- Sandboxed extension with no network access required
+- Separate Swift package that can render Markdown to self-contained HTML
+- `mdql` CLI for rendering Markdown files to HTML
 
----
+## Development
 
-## Requirements
-
-- macOS 12 (Monterey) or later
-- Xcode 14 or later
-- [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`) to
-  generate the Xcode project from `project.yml`
-
----
-
-## Build & install
+Generate the Xcode project:
 
 ```bash
-git clone https://github.com/jzone3/markdown-quicklook.git
-cd markdown-quicklook
-
-# 1) Generate the Xcode project from the committed spec
-brew install xcodegen        # if you don't have it
+brew install xcodegen
 xcodegen generate
-
-# 2) Open it
-open MarkdownQuickLook.xcodeproj
 ```
 
-In Xcode:
-
-1. Select the **MarkdownQuickLook** scheme.
-2. Open the **MarkdownQuickLook** target → **Signing & Capabilities** and set your
-   **Team** (a free personal Apple ID works for local use; pick "Sign to Run
-   Locally" if you have no team). Do the same for the **QuickLookExtension**
-   target. The bundle identifiers default to `com.example.markdownquicklook(.QuickLookExtension)` —
-   change the prefix to your own (e.g. `com.yourname.…`).
-3. **Build & Run** (⌘R) once. Running the app registers the Markdown file type and
-   the extension with the system.
-
-> Prefer the command line? `xcodebuild -project MarkdownQuickLook.xcodeproj -scheme MarkdownQuickLook -configuration Release build`
-
-### Agent-friendly install from Terminal
-
-An agent with shell access on macOS can build, install, register, and enable the
-extension without opening Xcode. This assumes Xcode command-line tools are
-installed and a usable Apple Development signing certificate is available in the
-login keychain. If signing fails, fall back to the Xcode instructions above and
-set the Team manually on both targets.
+Run package tests:
 
 ```bash
-git clone https://github.com/jzone3/markdown-quicklook.git
-cd markdown-quicklook
+swift test
+```
 
-brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
-xcodegen generate
+Render Markdown to HTML with the CLI:
 
-# Discover a local team ID from an Apple Development certificate.
-TEAM_ID="$(
-  security find-certificate -c 'Apple Development' -p \
-    | openssl x509 -noout -subject \
-    | sed -n 's/.* OU=\([^,]*\).*/\1/p' \
-    | head -1
-)"
+```bash
+swift run mdql Examples/sample.md preview.html
+```
 
+Build the app from Terminal if signing is already configured:
+
+```bash
 xcodebuild \
   -project MarkdownQuickLook.xcodeproj \
   -scheme MarkdownQuickLook \
   -configuration Debug \
   -derivedDataPath .derivedData-signed \
-  build \
-  CODE_SIGN_STYLE=Manual \
-  CODE_SIGN_IDENTITY='Apple Development' \
-  DEVELOPMENT_TEAM="$TEAM_ID" \
-  PROVISIONING_PROFILE_SPECIFIER=
-
-mkdir -p "$HOME/Applications"
-ditto .derivedData-signed/Build/Products/Debug/MarkdownQuickLook.app \
-  "$HOME/Applications/MarkdownQuickLook.app"
-
-open -gj "$HOME/Applications/MarkdownQuickLook.app"
-sleep 2
-pluginkit -e use -i com.example.markdownquicklook.QuickLookExtension || true
-qlmanage -r
-qlmanage -r cache
-pluginkit -m -v | grep -i com.example.markdownquicklook
+  build
 ```
-
-Then select a `.md` file in Finder and press **spacebar**. If the extension does
-not appear, open System Settings → General → Login Items & Extensions → Quick
-Look and enable **Markdown Preview** manually.
-
-### Enable the extension
-
-Quick Look extensions must be turned on once:
-
-- **macOS 15 (Sequoia):** System Settings → **General → Login Items & Extensions**
-  → **Quick Look** → enable **Markdown Preview**.
-- **macOS 13–14 (Ventura/Sonoma):** System Settings → **Privacy & Security →
-  Extensions → Quick Look** → enable **Markdown Preview**.
-- **macOS 12 (Monterey):** System Preferences → **Extensions → Quick Look** →
-  enable **Markdown Preview**.
-
-The app has an **"Open Extensions Settings"** button to take you there.
-
-### Try it
-
-Select any `.md`/`.markdown` file in Finder and press **spacebar**.
-
-If the preview doesn't update (Quick Look caches aggressively):
-
-```bash
-qlmanage -r            # reset Quick Look
-qlmanage -r cache
-# As a last resort, log out and back in.
-```
-
-You can also test a specific file from Terminal:
-
-```bash
-qlmanage -p path/to/file.md
-```
-
----
 
 ## How it works
 
-```
-Finder (spacebar)
-   └─▶ QuickLookExtension.appex  (NSExtensionPointIdentifier = com.apple.quicklook.preview)
-          └─▶ PreviewViewController : QLPreviewingController
-                 └─▶ read Markdown file as UTF-8 / Latin-1 fallback
-                 └─▶ render native NSAttributedString
-                        • headings, paragraphs, blockquotes, lists, task lists
-                        • inline bold/italic/strike/code/links
-                        • native NSTextTable / NSTextTableBlock tables
-                 └─▶ NSTextView inside NSScrollView
+```text
+Finder spacebar
+  -> QuickLookExtension.appex
+  -> PreviewViewController
+  -> read Markdown file
+  -> render native NSAttributedString
+  -> display in NSTextView inside NSScrollView
 ```
 
-The host app declares the `net.daringfireball.markdown` UTI (`App/Info.plist`) and
-binds it to the common Markdown extensions, so Finder routes those files to the
-extension. See [`RESEARCH.md`](RESEARCH.md) for the full design, the modern
-Preview-Extension vs. legacy `.qlgenerator` comparison, the OSS projects studied,
-and licensing.
+The extension intentionally avoids `WKWebView` because WebKit helper processes can be fragile inside Quick Look extension sandboxes.
 
-### Repository layout
+## Agent notes
 
-```
-markdown-quicklook/
-├── Package.swift                 # SwiftPM: MarkdownRenderer library + mdql CLI + tests
-├── project.yml                   # XcodeGen spec → macOS app + Quick Look extension
-├── Sources/
-│   ├── MarkdownRenderer/         # UI-free Markdown→HTML core (Linux + macOS)
-│   │   ├── MarkdownRenderer.swift
-│   │   ├── HTMLMarkupVisitor.swift
-│   │   ├── HTMLEscaping.swift
-│   │   ├── BundledAsset.swift
-│   │   └── Resources/            # github-markdown-css, highlight.js (+themes)
-│   └── mdql/                     # tiny CLI that renders Markdown to HTML
-├── Tests/MarkdownRendererTests/  # XCTest suite (runs on Linux)
-├── App/                          # SwiftUI host app (sources, Info.plist, entitlements)
-├── QuickLookExtension/           # QLPreviewingController, Info.plist, entitlements
-├── Examples/sample.md            # demo document
-├── docs/                         # screenshots
-├── RESEARCH.md                   # research write-up
-└── THIRD_PARTY_LICENSES.md
-```
+Agents working in this repo should read `AGENTS.md` first.
 
----
-
-## Develop & test the rendering core (no Mac required)
-
-The renderer is a normal Swift package; build and test it anywhere:
-
-```bash
-swift build
-swift test
-
-# Render a file to a self-contained HTML document with the CLI:
-swift run mdql Examples/sample.md preview.html
-# ...then open preview.html in any browser.
-```
-
----
-
-## Troubleshooting
-
-**"Markdown Preview" doesn't appear in the Quick Look extensions list.**
-Make sure you ran the host app at least once (⌘R) — registration only happens when
-the app launches. Then re-open System Settings → Quick Look. If it still doesn't
-show, run `pluginkit -m | grep -i markdown` in Terminal to confirm macOS sees the
-extension.
-
-**Spacebar still shows plain text (or an old version).**
-Quick Look caches aggressively. Reset it:
-
-```bash
-qlmanage -r            # reload Quick Look generators
-qlmanage -r cache      # clear the cache
-# last resort: log out and back in
-```
-
-Test a specific file directly from Terminal:
-
-```bash
-qlmanage -p path/to/file.md
-```
-
-**`xcodegen: command not found`.** Install it with `brew install xcodegen` (or grab
-a release from the [XcodeGen repo](https://github.com/yonaskolb/XcodeGen)).
-
-**Signing / "failed to register bundle" errors.** Confirm you set a Team on *both*
-the app and the extension targets, and that their bundle identifiers share a prefix
-you own (e.g. `com.yourname.markdownquicklook` and
-`com.yourname.markdownquicklook.QuickLookExtension`). Then clean (⇧⌘K) and rebuild.
-
-**I just want to see what it renders without a Mac.** Use the CLI — see
-[Develop & test the rendering core](#develop--test-the-rendering-core-no-mac-required).
-
----
-
-## Contributing
-
-Contributions welcome! Good first issues: a real app icon, a thumbnail extension
-(`QLThumbnailProvider`), settings (raw-HTML passthrough, theme choice), Mermaid /
-math support, and broader UTI coverage.
-
-- Keep the **rendering core UI-free** so it stays Linux-testable; put any
-  AppKit/WebKit code in the app/extension targets.
-- Add/keep **unit tests** for renderer changes (`swift test`).
-- Regenerate the project with `xcodegen generate` after editing `project.yml`
-  (don't commit the generated `.xcodeproj`).
-- Respect third-party licenses; don't copy GPL code (see
-  [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)).
-
----
+Agents installing this for a user should follow `agent-instructions/INSTALL.md`.
 
 ## License
 
-[MIT](LICENSE). Bundled assets and dependencies retain their own permissive
-licenses — see [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+[MIT](LICENSE). Bundled assets and dependencies retain their own permissive licenses; see [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
