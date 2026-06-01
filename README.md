@@ -4,9 +4,6 @@ Markdown QuickLook is a macOS Quick Look extension that renders `.md` files when
 
 It supports headings, lists, task lists, inline formatting, code blocks, blockquotes, and native AppKit-rendered tables.
 
-![Rendered Markdown preview — headings, lists, task list](docs/screenshot-light.png)
-![Rendered Markdown preview — code and a GFM table](docs/screenshot-code-table.png)
-
 ## Recommended install
 
 The easiest way to install this is to ask **Devin** or another local coding agent to do it for you.
