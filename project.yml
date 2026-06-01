@@ -14,6 +14,10 @@ options:
     macOS: "12.0"
   createIntermediateGroups: true
   generateEmptyDirectories: true
+  # Pin the pbxproj format so the generated project opens in Xcode 15 as well as
+  # 16+. Recent XcodeGen defaults to the Xcode 16 format (objectVersion 77),
+  # which older Xcode/CI toolchains cannot read. xcode15_0 => objectVersion 60.
+  projectFormat: xcode15_0
 
 packages:
   # The local Swift package in this same repo (Package.swift). It provides the
