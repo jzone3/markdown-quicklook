@@ -1,5 +1,7 @@
 # Markdown QuickLook
 
+[![Built by Devin](https://raw.githubusercontent.com/club-cog/built-by-devin/main/badges/built-by-devin.svg)](https://devin.ai)
+
 Markdown QuickLook is a macOS Quick Look extension that renders `.md` files when you press **spacebar** in Finder.
 
 It supports headings, lists, task lists, inline formatting, code blocks, blockquotes, and native AppKit-rendered tables.
