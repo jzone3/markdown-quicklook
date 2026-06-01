@@ -63,6 +63,7 @@ qlmanage -r cache
 ## Features
 
 - Native macOS Quick Look preview extension
+- Menu bar helper app, no Dock icon
 - Headings, paragraphs, blockquotes, lists, task lists, links, inline code, bold, italic, strikethrough
 - Native AppKit table rendering with `NSTextTable`
 - Sandboxed extension with no network access required
