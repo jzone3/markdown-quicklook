@@ -1,0 +1,5 @@
+A minimal monochrome macOS menu-bar (status bar) template icon. Solid pure black silhouette on a fully transparent background. Single flat weight, NO gradients, NO shadows, NO color, NO 3D — a clean flat vector glyph only.
+
+The glyph is the canonical Markdown mark: a rounded-rectangle outline frame containing a bold capital letter "M" and, to its right, a downward-pointing arrow (a vertical stem with a chevron/triangle head). Thick confident strokes, geometric, evenly weighted, high contrast.
+
+It must be crisp and instantly legible at very small size (18x18 points). Centered in the canvas with generous even padding around the mark. Flat icon, no text or wordmark, nothing but the black markdown glyph on transparent. Pure black (#000000) only.
