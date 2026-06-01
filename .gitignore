@@ -1,0 +1,25 @@
+# Generated Xcode project (regenerate with `xcodegen generate`)
+*.xcodeproj
+
+# Xcode / macOS build artifacts
+.DS_Store
+build/
+DerivedData/
+.derivedData*/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Misc
+test-files/
+*.moved-aside
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3

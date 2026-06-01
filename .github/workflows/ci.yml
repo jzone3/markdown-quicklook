@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Build + unit-test the platform-independent rendering core on Linux. This is
+  # the same configuration used during development and is the authoritative test
+  # for the renderer.
+  renderer-linux:
+    name: Renderer (Linux, Swift)
+    runs-on: ubuntu-latest
+    container: swift:5.10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: swift build
+      - name: Test
+        run: swift test
+      - name: Render sample with the CLI (smoke test)
+        run: |
+          swift run mdql Examples/sample.md preview.html
+          test -s preview.html
+
+  # Generate the Xcode project and compile the macOS app + Quick Look extension.
+  # Code signing is disabled so this works on CI without certificates.
+  app-macos:
+    name: App + Extension (macOS, Xcode)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Unit tests (SwiftPM)
+        run: swift test
+      - name: Build app + extension (no signing)
+        run: |
+          xcodebuild \
+            -project MarkdownQuickLook.xcodeproj \
+            -scheme MarkdownQuickLook \
+            -configuration Debug \
+            -destination 'platform=macOS' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            build

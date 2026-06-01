@@ -1,0 +1,93 @@
+name: MarkdownQuickLook
+
+# Generate the Xcode project with XcodeGen:
+#   brew install xcodegen
+#   xcodegen generate
+#   open MarkdownQuickLook.xcodeproj
+#
+# The generated .xcodeproj is intentionally NOT committed (see .gitignore); this
+# spec is the single source of truth so the project is fully reproducible.
+
+options:
+  bundleIdPrefix: com.example.markdownquicklook
+  deploymentTarget:
+    macOS: "12.0"
+  createIntermediateGroups: true
+  generateEmptyDirectories: true
+  # Pin the pbxproj format so the generated project opens in Xcode 15 as well as
+  # 16+. Recent XcodeGen defaults to the Xcode 16 format (objectVersion 77),
+  # which older Xcode/CI toolchains cannot read. xcode15_0 => objectVersion 60.
+  projectFormat: xcode15_0
+
+packages:
+  # The local Swift package in this same repo (Package.swift). It provides the
+  # platform-independent `MarkdownRenderer` library used by both targets below.
+  MarkdownQuickLook:
+    path: .
+
+settings:
+  base:
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.9"
+    CODE_SIGN_STYLE: Automatic
+    # Set your Apple Developer Team ID here (or in Xcode's Signing & Capabilities)
+    # so the app + extension can be code signed. Leaving it blank is fine for a
+    # first local build with "Sign to Run Locally".
+    DEVELOPMENT_TEAM: ""
+    ENABLE_HARDENED_RUNTIME: true
+
+targets:
+  # ----------------------------------------------------------------------------
+  # Host application
+  # ----------------------------------------------------------------------------
+  MarkdownQuickLook:
+    type: application
+    platform: macOS
+    sources:
+      - path: App/Sources
+      - path: App/Resources
+    dependencies:
+      - package: MarkdownQuickLook
+        product: MarkdownRenderer
+      # Embed the Quick Look extension inside the app bundle.
+      - target: QuickLookExtension
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.markdownquicklook
+        INFOPLIST_FILE: App/Info.plist
+        CODE_SIGN_ENTITLEMENTS: App/MarkdownQuickLook.entitlements
+        COMBINE_HIDPI_IMAGES: true
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: true
+
+  # ----------------------------------------------------------------------------
+  # Quick Look Preview Extension
+  # ----------------------------------------------------------------------------
+  QuickLookExtension:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: QuickLookExtension/Sources
+    dependencies:
+      - package: MarkdownQuickLook
+        product: MarkdownRenderer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.markdownquicklook.QuickLookExtension
+        INFOPLIST_FILE: QuickLookExtension/Info.plist
+        CODE_SIGN_ENTITLEMENTS: QuickLookExtension/QuickLookExtension.entitlements
+        # The principal class is "<ModuleName>.<ClassName>".
+        # The extension's module name is the product name, QuickLookExtension.
+        PRODUCT_MODULE_NAME: QuickLookExtension
+
+schemes:
+  MarkdownQuickLook:
+    build:
+      targets:
+        MarkdownQuickLook: all
+    run:
+      config: Debug
+    archive:
+      config: Release
