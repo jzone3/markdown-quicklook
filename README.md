@@ -11,23 +11,14 @@ that renders Markdown to a native AppKit preview right in the spacebar preview.
 ![Rendered Markdown preview — headings, lists, task list](docs/screenshot-light.png)
 ![Rendered Markdown preview — syntax-highlighted code and a GFM table](docs/screenshot-code-table.png)
 
-> [!IMPORTANT]
-> **Branch note.** The installable app currently lives on the
-> `devin/1780329911-markdown-quicklook` branch. The repository default branch is
-> `master`, which still contains only the original stub README. If an agent is
-> installing this from a fresh clone, make sure it checks out this branch first.
-
----
-
 ## Quick start (how to do it)
 
 End-to-end, from a clean Mac to a rendered spacebar preview:
 
 ```bash
-# 1. Get the code and check out the installable branch
+# 1. Get the code
 git clone https://github.com/jzone3/markdown-quicklook.git
 cd markdown-quicklook
-git checkout devin/1780329911-markdown-quicklook
 
 # 2. Generate the Xcode project (one-time tool install)
 brew install xcodegen
@@ -90,7 +81,6 @@ See [Build & install](#build--install) below.
 ```bash
 git clone https://github.com/jzone3/markdown-quicklook.git
 cd markdown-quicklook
-git checkout devin/1780329911-markdown-quicklook
 
 # 1) Generate the Xcode project from the committed spec
 brew install xcodegen        # if you don't have it
@@ -124,7 +114,6 @@ set the Team manually on both targets.
 ```bash
 git clone https://github.com/jzone3/markdown-quicklook.git
 cd markdown-quicklook
-git checkout devin/1780329911-markdown-quicklook
 
 brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
 xcodegen generate
