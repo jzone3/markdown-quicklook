@@ -5,6 +5,7 @@
 .DS_Store
 build/
 DerivedData/
+.derivedData*/
 *.xcuserstate
 xcuserdata/
 *.xcscmblueprint
@@ -16,6 +17,7 @@ xcuserdata/
 Package.resolved
 
 # Misc
+test-files/
 *.moved-aside
 *.pbxuser
 *.mode1v3
