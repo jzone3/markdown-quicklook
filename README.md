@@ -25,6 +25,41 @@ in the spacebar preview.
 
 ---
 
+## Quick start (how to do it)
+
+End-to-end, from a clean Mac to a rendered spacebar preview:
+
+```bash
+# 1. Get the code
+git clone https://github.com/jzone3/markdown-quicklook.git
+cd markdown-quicklook
+
+# 2. Generate the Xcode project (one-time tool install)
+brew install xcodegen
+xcodegen generate
+
+# 3. Open it in Xcode
+open MarkdownQuickLook.xcodeproj
+```
+
+4. In Xcode, set a **signing Team** on **both** targets (`MarkdownQuickLook` and
+   `QuickLookExtension`): select each target → **Signing & Capabilities** → pick
+   your Team (a free personal Apple ID is fine — choose *Sign to Run Locally* if
+   you have no team).
+5. Press **⌘R** to **Build & Run** the host app once. This registers the Markdown
+   file type and the extension with macOS.
+6. **Enable the extension:** System Settings → **General → Login Items &
+   Extensions → Quick Look** → turn on **Markdown Preview**. (Path differs by
+   macOS version — see [Enable the extension](#enable-the-extension). The app also
+   has an *Open Extensions Settings* button.)
+7. In Finder, select any `.md` file and press **spacebar** — you should see it
+   rendered.
+
+Stuck? Jump to [Troubleshooting](#troubleshooting). Want details on each step?
+See [Build & install](#build--install) below.
+
+---
+
 ## Features
 
 - **GitHub-flavored Markdown** via Apple's [swift-markdown](https://github.com/swiftlang/swift-markdown)
@@ -168,6 +203,42 @@ swift test
 swift run mdql Examples/sample.md preview.html
 # ...then open preview.html in any browser.
 ```
+
+---
+
+## Troubleshooting
+
+**"Markdown Preview" doesn't appear in the Quick Look extensions list.**
+Make sure you ran the host app at least once (⌘R) — registration only happens when
+the app launches. Then re-open System Settings → Quick Look. If it still doesn't
+show, run `pluginkit -m | grep -i markdown` in Terminal to confirm macOS sees the
+extension.
+
+**Spacebar still shows plain text (or an old version).**
+Quick Look caches aggressively. Reset it:
+
+```bash
+qlmanage -r            # reload Quick Look generators
+qlmanage -r cache      # clear the cache
+# last resort: log out and back in
+```
+
+Test a specific file directly from Terminal:
+
+```bash
+qlmanage -p path/to/file.md
+```
+
+**`xcodegen: command not found`.** Install it with `brew install xcodegen` (or grab
+a release from the [XcodeGen repo](https://github.com/yonaskolb/XcodeGen)).
+
+**Signing / "failed to register bundle" errors.** Confirm you set a Team on *both*
+the app and the extension targets, and that their bundle identifiers share a prefix
+you own (e.g. `com.yourname.markdownquicklook` and
+`com.yourname.markdownquicklook.QuickLookExtension`). Then clean (⇧⌘K) and rebuild.
+
+**I just want to see what it renders without a Mac.** Use the CLI — see
+[Develop & test the rendering core](#develop--test-the-rendering-core-no-mac-required).
 
 ---
 
