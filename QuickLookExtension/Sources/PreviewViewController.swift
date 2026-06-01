@@ -13,6 +13,16 @@ final class PreviewViewController: NSViewController, QLPreviewingController {
         textView.isEditable = false
         textView.isSelectable = true
         textView.drawsBackground = false
+        textView.isAutomaticQuoteSubstitutionEnabled = false
+        textView.isAutomaticDashSubstitutionEnabled = false
+        textView.isAutomaticTextReplacementEnabled = false
+        textView.isAutomaticSpellingCorrectionEnabled = false
+        textView.isAutomaticDataDetectionEnabled = false
+        textView.isAutomaticLinkDetectionEnabled = false
+        textView.isContinuousSpellCheckingEnabled = false
+        textView.isGrammarCheckingEnabled = false
+        textView.smartInsertDeleteEnabled = false
+        textView.enabledTextCheckingTypes = 0
         textView.textContainerInset = NSSize(width: 28, height: 24)
         textView.textContainer?.widthTracksTextView = true
         textView.autoresizingMask = [.width]
