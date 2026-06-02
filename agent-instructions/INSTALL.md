@@ -66,16 +66,16 @@ Register and enable the Quick Look extension:
 ```bash
 open -gj "$HOME/Applications/MarkdownQuickLook.app"
 sleep 2
-pluginkit -e use -i com.example.markdownquicklook.QuickLookExtension || true
+pluginkit -e use -i com.devin.markdownquicklook.QuickLookExtension || true
 qlmanage -r
 qlmanage -r cache
-pluginkit -m -v | grep -i com.example.markdownquicklook
+pluginkit -m -v | grep -i com.devin.markdownquicklook
 ```
 
 A successful registration usually prints something like:
 
 ```text
-+    com.example.markdownquicklook.QuickLookExtension(...)
++    com.devin.markdownquicklook.QuickLookExtension(...)
 ```
 
 ## Manual fallback
@@ -121,7 +121,7 @@ Check recent logs:
 
 ```bash
 log show --last 5m --style compact \
-  --predicate 'process == "QuickLookExtension" OR eventMessage CONTAINS[c] "com.example.markdownquicklook"' \
+  --predicate 'process == "QuickLookExtension" OR eventMessage CONTAINS[c] "com.devin.markdownquicklook"' \
   | tail -120
 ```
 
