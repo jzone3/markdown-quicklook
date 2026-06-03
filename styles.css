@@ -1,0 +1,221 @@
+/* Markdown QuickLook — landing page
+   Plain, left-aligned, document-style. Reminiscent of an old-web README/forum
+   post, leaning into the Markdown theme (plain-text "#" heading markers,
+   underlined links, thin rules) — just a little more styling. */
+
+:root {
+  --bg: #fbfbfa;
+  --fg: #1b1b1a;
+  --muted: #6c6c66;
+  --faint: #9a9a93;
+  --line: #e3e2dc;
+  --link: #0a5fb4;          /* classic link blue */
+  --marker: #b34a2f;        /* markdown "#" marker — rusty terminal accent */
+  --code-bg: #f1f0ea;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, "DejaVu Sans Mono",
+    "JetBrains Mono", Menlo, Consolas, monospace;
+  --serif-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
+    sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111210;
+    --fg: #e6e6e1;
+    --muted: #a3a39b;
+    --faint: #6f6f68;
+    --line: #2a2b27;
+    --link: #6fb2ef;
+    --marker: #e08a6b;
+    --code-bg: #1c1d1a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: 15.5px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Left-aligned column: sits toward the left with room to breathe on the right,
+   plus normal margins. Not centered. */
+.page {
+  max-width: 46rem;
+  margin: 0;
+  padding: 40px max(20px, 4vw) 72px max(28px, 6vw);
+}
+
+a { color: var(--link); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { text-decoration: none; }
+
+/* ---------- Masthead ---------- */
+.masthead { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.masthead img { width: 46px; height: 46px; border-radius: 9px; display: block; }
+.masthead h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.2;
+}
+.subtitle {
+  color: var(--muted);
+  margin: 2px 0 0;
+  font-size: 14px;
+}
+
+.lede {
+  font-family: var(--serif-ui);
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 22px 0 0;
+  max-width: 40rem;
+}
+.lede code { font-family: var(--mono); }
+
+/* keyboard hint */
+kbd {
+  font-family: var(--mono);
+  font-size: 0.85em;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+/* ---------- Section headings (markdown-source style) ---------- */
+h2 {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0 0 14px;
+}
+h2::before {
+  content: "## ";
+  color: var(--marker);
+  font-weight: 700;
+}
+h3 { font-size: 15px; font-weight: 700; margin: 0; }
+h3::before { content: "### "; color: var(--marker); font-weight: 700; }
+
+/* thin divider between sections */
+hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 34px 0;
+}
+
+section { font-family: var(--serif-ui); }
+section h2 { font-family: var(--mono); }
+section p { margin: 0 0 12px; }
+
+/* ---------- Download line ---------- */
+.download { font-family: var(--mono); margin: 26px 0 4px; }
+.download a.primary {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid var(--fg);
+  border-radius: 6px;
+  padding: 8px 16px;
+  color: var(--fg);
+  font-weight: 700;
+  background: transparent;
+}
+.download a.primary:hover { background: var(--fg); color: var(--bg); }
+.download .meta {
+  color: var(--faint);
+  font-size: 13px;
+  margin-top: 8px;
+}
+.download .meta a { color: var(--muted); }
+
+/* ---------- Demo ---------- */
+.demo { margin: 28px 0 0; }
+.demo img {
+  display: block;
+  width: 100%;
+  max-width: 40rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.demo figcaption {
+  font-family: var(--mono);
+  color: var(--faint);
+  font-size: 12.5px;
+  margin-top: 8px;
+}
+
+/* ---------- Lists (features / steps) ---------- */
+ul.feat, ol.steps { margin: 0; padding-left: 1.4em; max-width: 40rem; }
+ul.feat { list-style: none; padding-left: 0; }
+ul.feat li {
+  position: relative;
+  padding-left: 1.4em;
+  margin: 0 0 10px;
+}
+ul.feat li::before {
+  content: "-";
+  position: absolute;
+  left: 0;
+  color: var(--marker);
+  font-family: var(--mono);
+  font-weight: 700;
+}
+ul.feat li b, ol.steps li b { font-weight: 700; }
+ul.feat li .d { color: var(--muted); }
+
+ol.steps li { margin: 0 0 12px; }
+ol.steps li::marker { color: var(--marker); font-family: var(--mono); }
+ol.steps li .d { color: var(--muted); display: block; }
+
+/* inline code */
+code, .ic {
+  font-family: var(--mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.5px 5px;
+}
+
+.callout {
+  font-family: var(--serif-ui);
+  font-size: 14px;
+  color: var(--muted);
+  border-left: 3px solid var(--line);
+  padding: 2px 0 2px 14px;
+  margin: 16px 0 0;
+  max-width: 40rem;
+}
+.callout code { font-size: 0.85em; }
+
+/* ---------- Footer ---------- */
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+.built { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--muted); }
+.built:hover { color: var(--fg); }
+.built img { height: 20px; width: auto; display: block; }
+.built img.dark-only { display: none; }
+@media (prefers-color-scheme: dark) {
+  .built img.light-only { display: none; }
+  .built img.dark-only { display: block; }
+}
+footer .row2 { margin-top: 8px; }
+footer a { color: var(--muted); }
+footer a:hover { color: var(--fg); }
