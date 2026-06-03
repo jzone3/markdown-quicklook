@@ -6,6 +6,18 @@ name: Release
 # The release always uploads an asset named `MarkdownQuickLook.dmg`, so the
 # landing page can link to the stable URL:
 #   https://github.com/<owner>/<repo>/releases/latest/download/MarkdownQuickLook.dmg
+#
+# Code signing + notarization are OPTIONAL and enabled automatically when the
+# signing secrets are present (see below). Without them, the build still runs
+# and produces an ad-hoc-signed .dmg (Gatekeeper will warn on first open).
+#
+# Required repo secrets for a notarized build:
+#   MACOS_CERTIFICATE_P12_BASE64  base64 of an exported "Developer ID Application" cert (.p12)
+#   MACOS_CERTIFICATE_PASSWORD    the .p12 export password
+#   APPLE_TEAM_ID                 10-char Apple Developer Team ID
+#   AC_API_KEY_ID                 App Store Connect API key ID
+#   AC_API_ISSUER_ID              App Store Connect API issuer ID
+#   AC_API_KEY_P8_BASE64          base64 of the App Store Connect API key (.p8)
 
 on:
   push:
@@ -24,6 +36,14 @@ jobs:
   release:
     name: Build .dmg and publish release
     runs-on: macos-14
+    env:
+      MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}
+      AC_API_ISSUER_ID: ${{ secrets.AC_API_ISSUER_ID }}
+      AC_API_KEY_P8_BASE64: ${{ secrets.AC_API_KEY_P8_BASE64 }}
+      DMG: ${{ github.workspace }}/MarkdownQuickLook.dmg
     steps:
       - uses: actions/checkout@v4
 
@@ -33,8 +53,64 @@ jobs:
       - name: Unit tests (SwiftPM)
         run: swift test
 
+      # Import the Developer ID cert into a temporary keychain so xcodebuild can
+      # sign with it. Only runs when the cert secret is present; otherwise the
+      # build falls back to ad-hoc signing.
+      - name: Import Developer ID certificate
+        if: ${{ env.MACOS_CERTIFICATE_P12_BASE64 != '' }}
+        run: |
+          set -euo pipefail
+          KEYCHAIN="$RUNNER_TEMP/signing.keychain-db"
+          KEYCHAIN_PW="$(openssl rand -base64 24)"
+          security create-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PW" "$KEYCHAIN"
+          echo "$MACOS_CERTIFICATE_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -k "$KEYCHAIN" \
+            -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple:,codesign: \
+            -s -k "$KEYCHAIN_PW" "$KEYCHAIN" >/dev/null
+          # Put our keychain first in the search list (keep the login/system ones).
+          security list-keychains -d user -s "$KEYCHAIN" \
+            $(security list-keychains -d user | sed s/\"//g)
+          rm -f "$RUNNER_TEMP/cert.p12"
+          # Tell make-dmg.sh to sign with Developer ID.
+          echo "CODE_SIGN_IDENTITY=Developer ID Application" >> "$GITHUB_ENV"
+          echo "DEVELOPMENT_TEAM=$APPLE_TEAM_ID" >> "$GITHUB_ENV"
+          echo "==> Imported signing identities:"
+          security find-identity -v -p codesigning "$KEYCHAIN"
+
       - name: Build + package .dmg
-        run: scripts/make-dmg.sh "$GITHUB_WORKSPACE/MarkdownQuickLook.dmg"
+        run: scripts/make-dmg.sh "$DMG"
+
+      # Sign the disk image itself (the app inside is already signed by xcodebuild).
+      - name: Sign .dmg
+        if: ${{ env.MACOS_CERTIFICATE_P12_BASE64 != '' }}
+        run: |
+          set -euo pipefail
+          codesign --force --timestamp \
+            --sign "Developer ID Application" "$DMG"
+          codesign --verify --verbose=2 "$DMG"
+
+      # Notarize with the App Store Connect API key, then staple the ticket so
+      # the .dmg opens with no warning even offline.
+      - name: Notarize + staple
+        if: ${{ env.AC_API_KEY_P8_BASE64 != '' && env.MACOS_CERTIFICATE_P12_BASE64 != '' }}
+        run: |
+          set -euo pipefail
+          echo "$AC_API_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/AuthKey.p8"
+          echo "==> Submitting for notarization (this can take a few minutes)"
+          xcrun notarytool submit "$DMG" \
+            --key "$RUNNER_TEMP/AuthKey.p8" \
+            --key-id "$AC_API_KEY_ID" \
+            --issuer "$AC_API_ISSUER_ID" \
+            --wait
+          rm -f "$RUNNER_TEMP/AuthKey.p8"
+          echo "==> Stapling notarization ticket"
+          xcrun stapler staple "$DMG"
+          xcrun stapler validate "$DMG"
+          echo "==> Gatekeeper assessment:"
+          spctl -a -t open --context context:primary-signature -vv "$DMG"
 
       - name: Resolve tag
         id: tag
