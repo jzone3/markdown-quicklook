@@ -8,9 +8,19 @@ It supports headings, lists, task lists, inline formatting, code blocks, blockqu
 
 ![Demo: pressing spacebar on Markdown files in Finder shows rendered Quick Look previews with headings, code blocks, tables, and task lists](assets/markdown-quicklook-demo.gif)
 
-## Recommended install
+## Download
 
-The easiest way to install this is to ask **Devin** or another local coding agent to do it for you.
+- **Landing page:** https://jzone3.github.io/markdown-quicklook/
+- **Direct download:** [latest `MarkdownQuickLook.dmg`](https://github.com/jzone3/markdown-quicklook/releases/latest/download/MarkdownQuickLook.dmg)
+
+Open the `.dmg`, drag **Markdown QuickLook** into `Applications`, and launch it once.
+The app is not notarized yet, so on first launch macOS may flag it as coming from
+an unidentified developer — right-click the app → **Open** → **Open**, or run
+`xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app`.
+
+## Recommended install (via an agent)
+
+If you'd rather build from source, the easiest way is to ask **Devin** or another local coding agent to do it for you.
 
 Quick Look extensions require a few Mac-specific steps that agents are good at handling:
 

@@ -1,0 +1,54 @@
+name: Release
+
+# Build the macOS app, package it into a double-click .dmg, and publish a
+# GitHub Release. Triggered by pushing a version tag (e.g. v0.2.0) or manually.
+#
+# The release always uploads an asset named `MarkdownQuickLook.dmg`, so the
+# landing page can link to the stable URL:
+#   https://github.com/<owner>/<repo>/releases/latest/download/MarkdownQuickLook.dmg
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to create (e.g. v0.2.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build .dmg and publish release
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Unit tests (SwiftPM)
+        run: swift test
+
+      - name: Build + package .dmg
+        run: scripts/make-dmg.sh "$GITHUB_WORKSPACE/MarkdownQuickLook.dmg"
+
+      - name: Resolve tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          name: Markdown QuickLook ${{ steps.tag.outputs.tag }}
+          generate_release_notes: true
+          files: MarkdownQuickLook.dmg

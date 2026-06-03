@@ -52,3 +52,22 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             build
+
+  # Build the Release app and package the double-click .dmg the same way the
+  # release workflow does, so the packaging is validated on every PR. The .dmg
+  # is uploaded as a build artifact (not published as a release here).
+  package-macos:
+    name: Package .dmg (macOS)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Build + package .dmg
+        run: scripts/make-dmg.sh "$GITHUB_WORKSPACE/MarkdownQuickLook.dmg"
+      - name: Upload .dmg artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MarkdownQuickLook-dmg
+          path: MarkdownQuickLook.dmg
+          if-no-files-found: error
