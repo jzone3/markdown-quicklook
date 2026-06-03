@@ -1,8 +1,9 @@
 name: Deploy landing page
 
-# Publishes the static landing page in docs/ to the gh-pages branch, which
-# GitHub Pages serves. Source stays in docs/ on master; the built site lives on
-# the gh-pages branch.
+# Publishes the static landing page in docs/ to GitHub Pages using the official
+# GitHub Actions Pages deployment. The first run auto-enables Pages via the
+# Actions token (enablement: true), so no manual "Settings -> Pages" toggle is
+# required. Source stays in docs/ on master.
 
 on:
   push:
@@ -12,29 +13,38 @@ on:
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
+# Permissions the GITHUB_TOKEN needs to enable + deploy Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 # Only one deploy at a time; let an in-progress run finish.
 concurrency:
-  group: pages-deploy
+  group: pages
   cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Publish docs/ to gh-pages
+    name: Build & deploy docs/ to GitHub Pages
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Configure Pages (auto-enable on first run)
+        uses: actions/configure-pages@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
-          publish_branch: gh-pages
-          # Quick Look "site" is plain static files; no Jekyll processing.
-          enable_jekyll: false
-          user_name: github-actions[bot]
-          user_email: github-actions[bot]@users.noreply.github.com
-          commit_message: "deploy: ${{ github.event.head_commit.message || 'manual dispatch' }}"
+          enablement: true
+
+      - name: Upload docs/ as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
