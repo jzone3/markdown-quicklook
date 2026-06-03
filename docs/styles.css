@@ -1,0 +1,278 @@
+/* Markdown QuickLook — "Minimal Zen"
+   Extreme restraint, whitespace, thin type, a single soft-blue accent.        */
+
+:root {
+  --accent: #5a8dd6;            /* one soft blue, used sparingly */
+  --bg: #fcfcfb;
+  --surface: #ffffff;
+  --ink: #2b2b2e;              /* primary text, slightly soft */
+  --ink-soft: #6b6b70;        /* secondary text */
+  --ink-faint: #a0a0a6;       /* labels, captions */
+  --hairline: rgba(0, 0, 0, 0.06);
+  --code-bg: rgba(0, 0, 0, 0.045);
+
+  --maxw: 33rem;              /* narrow centered column */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --accent: #7aa7e6;
+    --bg: #0e0f11;
+    --surface: #141518;
+    --ink: #e7e7ea;
+    --ink-soft: #a6a6ad;
+    --ink-faint: #6e6e76;
+    --hairline: rgba(255, 255, 255, 0.08);
+    --code-bg: rgba(255, 255, 255, 0.06);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: 300;                /* thin / light typography */
+  font-size: 17px;
+  line-height: 1.85;               /* generous line height */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: rgba(90, 141, 214, 0.18); }
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+a:hover { border-bottom-color: currentColor; }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 0.12em 0.4em;
+  border-radius: 5px;
+}
+
+/* ---- layout ---------------------------------------------------------- */
+
+.page {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(4rem, 12vh, 9rem) 1.6rem 5rem;
+}
+
+.block { margin-top: clamp(4.5rem, 11vh, 7rem); }
+
+/* tiny muted uppercase section labels */
+.label {
+  margin: 0 0 1.8rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---- hero ------------------------------------------------------------ */
+
+.hero { text-align: center; }
+
+.app-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  margin-bottom: 1.6rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 2.6rem);
+  font-weight: 200;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.subtitle {
+  margin: 0.9rem 0 0;
+  font-size: 1.02rem;
+  font-weight: 300;
+  color: var(--ink-soft);
+}
+
+.lede {
+  margin: 2.4rem auto 0;
+  max-width: 30rem;
+  color: var(--ink-soft);
+  text-align: left;
+}
+
+/* ---- download -------------------------------------------------------- */
+
+.download {
+  margin-top: 2.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.download-button {
+  display: inline-block;
+  padding: 0.7rem 1.6rem;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.download-button:hover {
+  background: var(--accent);
+  color: #fff;
+  border-bottom-color: var(--accent);
+}
+@media (prefers-color-scheme: dark) {
+  .download-button:hover { color: #0e0f11; }
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+.meta a { color: var(--ink-faint); }
+.meta a:hover { color: var(--ink-soft); }
+
+/* ---- demo ------------------------------------------------------------ */
+
+.demo {
+  margin: clamp(3.5rem, 9vh, 5.5rem) 0 0;
+  text-align: center;
+}
+.demo img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--hairline);
+  display: block;
+}
+.demo figcaption {
+  margin-top: 1rem;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+/* ---- features -------------------------------------------------------- */
+
+.features {
+  margin: 0;
+  display: grid;
+  gap: 2.2rem;
+}
+.feature dt {
+  font-weight: 400;
+  color: var(--ink);
+}
+.feature dd {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+}
+
+/* ---- install steps --------------------------------------------------- */
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: grid;
+  gap: 2.2rem;
+}
+.steps li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 2.6rem;
+}
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--hairline);
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--accent);
+}
+.step-title { display: block; font-weight: 400; color: var(--ink); }
+.step-body { display: block; margin-top: 0.2rem; color: var(--ink-soft); }
+
+.note {
+  margin: 2.6rem 0 0;
+  padding-top: 1.8rem;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.86rem;
+  line-height: 1.7;
+  color: var(--ink-faint);
+}
+.note code { font-size: 0.82em; }
+
+/* ---- footer ---------------------------------------------------------- */
+
+.footer {
+  margin-top: clamp(5rem, 13vh, 8rem);
+  padding-top: 2.4rem;
+  border-top: 1px solid var(--hairline);
+  text-align: center;
+}
+.built-by {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: none;
+}
+.built-by:hover { border-bottom: none; }
+.built-by-text {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.devin-lockup { height: 18px; width: auto; display: block; }
+.devin-lockup-dark { display: none; }
+
+.footer-links {
+  margin: 1.4rem 0 0;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+.footer-links a { color: var(--ink-faint); }
+.footer-links a:hover { color: var(--ink-soft); }
+
+@media (prefers-color-scheme: dark) {
+  .devin-lockup-light { display: none; }
+  .devin-lockup-dark { display: block; }
+}
+
+/* ---- responsive ------------------------------------------------------ */
+
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .page { padding-top: 3.5rem; }
+  .lede { text-align: left; }
+}
