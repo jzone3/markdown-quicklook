@@ -74,9 +74,12 @@
         </li>
       </ol>
       <p class="callout">
-        Not notarized yet: on first launch macOS may say the app is from an
-        unidentified developer. Right-click the app &rarr; <b>Open</b> &rarr; <b>Open</b>,
-        or run <code>xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app</code>.
+        Not notarized yet, so on first open macOS may block it (&ldquo;Apple could
+        not verify&hellip;&rdquo;). To open it anyway: go to
+        <b>System&nbsp;Settings &rarr; Privacy&nbsp;&amp;&nbsp;Security</b>, scroll
+        to the message about <span class="ic">Markdown QuickLook</span>, and click
+        <b>Open&nbsp;Anyway</b>. Or run once in Terminal:
+        <code>xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app</code>.
         Prefer building from source? See the
         <a href="https://github.com/jzone3/markdown-quicklook#manual-install">README</a>.
       </p>

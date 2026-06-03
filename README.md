@@ -10,13 +10,15 @@ It supports headings, lists, task lists, inline formatting, code blocks, blockqu
 
 ## Download
 
-- **Landing page:** https://jzone3.github.io/markdown-quicklook/
+- **Landing page:** https://quicklookmd.com
 - **Direct download:** [latest `MarkdownQuickLook.dmg`](https://github.com/jzone3/markdown-quicklook/releases/latest/download/MarkdownQuickLook.dmg)
 
 Open the `.dmg`, drag **Markdown QuickLook** into `Applications`, and launch it once.
-The app is not notarized yet, so on first launch macOS may flag it as coming from
-an unidentified developer — right-click the app → **Open** → **Open**, or run
+The app is not notarized yet, so on first open macOS may block it ("Apple could not
+verify…"). To open it anyway, go to **System Settings → Privacy & Security**, scroll
+to the message about Markdown QuickLook, and click **Open Anyway** — or run once:
 `xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app`.
+(On macOS 15 Sequoia the old right-click → Open shortcut no longer works.)
 
 ## Recommended install (via an agent)
 
