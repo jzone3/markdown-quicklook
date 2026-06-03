@@ -113,6 +113,17 @@ xcodebuild \
   build
 ```
 
+## Landing page
+
+The download page source lives in [`docs/`](docs/). It is deployed by the
+[`Deploy landing page`](.github/workflows/pages.yml) workflow, which publishes
+`docs/` to the `gh-pages` branch on every push to `master` (and on manual
+dispatch). GitHub Pages then serves that branch.
+
+To enable it (one-time, repo admin): **Settings → Pages → Build and deployment →
+Source = "Deploy from a branch" → Branch = `gh-pages` / `/ (root)`**. The site
+goes live at https://jzone3.github.io/markdown-quicklook/.
+
 ## How it works
 
 ```text
