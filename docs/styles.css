@@ -1,0 +1,428 @@
+/* =========================================================================
+   Markdown QuickLook — "Classic Mac OS (System 7)" landing page
+   Platinum gray + pinstripes, faux windows with striped title bars,
+   beveled 3D buttons. Hand-written, self-contained, no frameworks.
+   ========================================================================= */
+
+:root {
+  /* Platinum palette */
+  --platinum:        #b9b9b9;
+  --platinum-light:  #c9c9c9;
+  --window-bg:       #dddddd;
+  --content-bg:      #ffffff;
+  --ink:             #000000;
+  --ink-soft:        #333333;
+
+  /* Bevel colors */
+  --bevel-light:     #ffffff;
+  --bevel-face:      #d4d4d4;
+  --bevel-dark:      #808080;
+  --bevel-darker:    #555555;
+
+  /* Title bar */
+  --title-stripe:    #000000;
+
+  --menubar-bg:      #ffffff;
+
+  --shadow:          rgba(0, 0, 0, 0.55);
+
+  --font-chicago: "Chicago", "ChicagoFLF", "Charcoal", "Geneva",
+    -apple-system, BlinkMacSystemFont, "Tahoma", "Segoe UI", sans-serif;
+  --font-geneva: "Geneva", "Verdana", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Tahoma", sans-serif;
+  --font-mono: "Monaco", "Andale Mono", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-geneva);
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--ink);
+  /* Platinum gray with subtle pinstripes */
+  background-color: var(--platinum);
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0px,
+    rgba(255, 255, 255, 0.45) 1px,
+    rgba(0, 0, 0, 0.02) 1px,
+    rgba(0, 0, 0, 0.02) 3px
+  );
+  min-height: 100vh;
+}
+
+/* ---- Menu bar ---------------------------------------------------------- */
+.menubar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--menubar-bg);
+  border-bottom: 1px solid var(--ink);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+.menubar-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: 22px;
+  padding: 0 14px;
+  font-family: var(--font-chicago);
+  font-size: 13px;
+}
+.menu-apple {
+  width: 14px;
+  height: 16px;
+  /* Tiny pixel "apple" suggestion using a striped lozenge */
+  background:
+    radial-gradient(circle at 50% 40%, var(--ink) 0 5px, transparent 6px);
+  position: relative;
+}
+.menu-apple::after {
+  content: "";
+  position: absolute;
+  top: 1px; right: 1px;
+  width: 4px; height: 4px;
+  background: var(--menubar-bg);
+  border-radius: 0 4px 0 0;
+}
+.menu-item { color: var(--ink); }
+.menu-bold { font-weight: bold; }
+.menu-help { margin-left: auto; font-weight: bold; }
+
+/* ---- Desktop / layout -------------------------------------------------- */
+.desktop {
+  padding: 28px 16px 56px;
+}
+.stack {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* ---- Window chrome ----------------------------------------------------- */
+.window {
+  background: var(--window-bg);
+  border: 1px solid var(--ink);
+  box-shadow: 3px 3px 0 0 var(--shadow);
+}
+
+.titlebar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  border-bottom: 1px solid var(--ink);
+  /* horizontal pinstripe lines (active window look) */
+  background-image: repeating-linear-gradient(
+    180deg,
+    var(--title-stripe) 0px,
+    var(--title-stripe) 1px,
+    var(--window-bg) 1px,
+    var(--window-bg) 3px
+  );
+  background-color: var(--window-bg);
+  padding: 0 8px;
+}
+
+.titlebar-name {
+  font-family: var(--font-chicago);
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--ink);
+  background: var(--window-bg);
+  padding: 0 10px;
+  /* sit above the stripes */
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* close box (left) + zoom box (right) — square outlined widgets */
+.closebox, .zoombox {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: var(--window-bg);
+  border: 1px solid var(--ink);
+  z-index: 2;
+}
+.closebox { left: 8px; }
+.zoombox  { right: 8px; }
+.zoombox::before {
+  content: "";
+  position: absolute;
+  top: 1px; left: 1px; right: 4px; bottom: 4px;
+  border: 1px solid var(--ink);
+}
+
+.window-body {
+  background: var(--content-bg);
+  padding: 22px;
+}
+
+/* ---- Hero -------------------------------------------------------------- */
+.hero-body {
+  text-align: center;
+  padding: 30px 24px 26px;
+}
+.app-icon {
+  display: block;
+  margin: 0 auto 12px;
+  width: 64px;
+  height: 64px;
+  image-rendering: auto;
+}
+h1 {
+  font-family: var(--font-chicago);
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+.subtitle {
+  font-family: var(--font-chicago);
+  font-size: 15px;
+  margin: 0 auto 16px;
+  color: var(--ink-soft);
+}
+.lede {
+  max-width: 52ch;
+  margin: 0 auto 24px;
+  color: var(--ink-soft);
+  text-align: left;
+}
+.lede code, .note code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: #ededed;
+  border: 1px solid #c4c4c4;
+  padding: 0 4px;
+}
+
+.cta { margin: 4px 0 14px; }
+
+/* ---- Beveled default button -------------------------------------------- */
+.btn-default {
+  display: inline-block;
+  font-family: var(--font-chicago);
+  font-size: 16px;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--bevel-face);
+  padding: 12px 26px;
+  /* 3D bevel: light top/left, dark bottom/right */
+  border-top: 2px solid var(--bevel-light);
+  border-left: 2px solid var(--bevel-light);
+  border-right: 2px solid var(--bevel-dark);
+  border-bottom: 2px solid var(--bevel-dark);
+  /* classic "default button" heavy black ring */
+  outline: 2px solid var(--ink);
+  outline-offset: 1px;
+  box-shadow: 0 0 0 1px var(--ink);
+  cursor: pointer;
+}
+.btn-default:active {
+  /* invert bevel when pressed */
+  border-top: 2px solid var(--bevel-dark);
+  border-left: 2px solid var(--bevel-dark);
+  border-right: 2px solid var(--bevel-light);
+  border-bottom: 2px solid var(--bevel-light);
+  background: #c4c4c4;
+}
+.btn-default:focus-visible {
+  outline: 2px solid var(--ink);
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 6px 0 0;
+}
+.meta a, .lede a, .note a, .footer-links a {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.meta a:hover, .footer-links a:hover, .lede a:hover, .note a:hover { text-decoration: none; }
+
+/* ---- Demo -------------------------------------------------------------- */
+.demo-body { padding: 16px; }
+.demo-gif {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--ink);
+  /* inset bevel frame for the picture */
+  box-shadow:
+    inset 1px 1px 0 var(--bevel-dark),
+    inset -1px -1px 0 var(--bevel-light);
+  background: #000;
+}
+.caption {
+  margin: 12px 2px 2px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* ---- Features ---------------------------------------------------------- */
+.features {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 22px;
+}
+.features li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.features p, .steps p { margin: 0; color: var(--ink-soft); }
+.features strong, .steps strong { color: var(--ink); }
+.feat-bullet {
+  flex: 0 0 auto;
+  margin-top: 4px;
+  width: 12px;
+  height: 12px;
+  background: var(--bevel-face);
+  border-top: 1px solid var(--bevel-light);
+  border-left: 1px solid var(--bevel-light);
+  border-right: 1px solid var(--bevel-dark);
+  border-bottom: 1px solid var(--bevel-dark);
+}
+
+/* ---- Install steps ----------------------------------------------------- */
+.steps {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.steps li { display: flex; gap: 12px; align-items: flex-start; }
+.step-num {
+  flex: 0 0 auto;
+  width: 24px; height: 24px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-chicago);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--bevel-face);
+  border-top: 2px solid var(--bevel-light);
+  border-left: 2px solid var(--bevel-light);
+  border-right: 2px solid var(--bevel-dark);
+  border-bottom: 2px solid var(--bevel-dark);
+}
+
+.note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #f3f3f3;
+  border: 1px solid var(--ink);
+  box-shadow: inset 1px 1px 0 var(--bevel-light), inset -1px -1px 0 var(--bevel-dark);
+  padding: 12px 14px;
+}
+.note p { margin: 0; font-size: 13px; color: var(--ink-soft); }
+.note-icon {
+  flex: 0 0 auto;
+  width: 20px; height: 20px;
+  display: grid; place-items: center;
+  font-family: var(--font-chicago);
+  font-weight: bold;
+  color: var(--ink);
+  background: var(--window-bg);
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+}
+
+/* ---- Footer ------------------------------------------------------------ */
+.footer-body {
+  text-align: center;
+  padding: 20px;
+}
+.devin-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.built { font-family: var(--font-chicago); font-size: 14px; }
+.lockup-img { display: inline-block; height: 22px; width: auto; vertical-align: middle; }
+.lockup-dark { display: none; }
+.footer-links {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.footer-links .dot { margin: 0 6px; }
+
+/* ---- Responsive -------------------------------------------------------- */
+@media (max-width: 560px) {
+  body { font-size: 14px; }
+  .desktop { padding: 18px 10px 40px; }
+  .stack { gap: 22px; }
+  h1 { font-size: 26px; }
+  .features { grid-template-columns: 1fr; gap: 14px; }
+  .window-body { padding: 16px; }
+  .hero-body { padding: 24px 16px 20px; }
+  .btn-default { font-size: 15px; padding: 11px 18px; }
+  .menubar-inner { gap: 12px; }
+  .menu-item:not(.menu-bold):not(.menu-help) { display: none; }
+}
+
+/* ---- Tasteful dark variant -------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --platinum:        #3a3a3c;
+    --window-bg:       #4a4a4d;
+    --content-bg:      #2b2b2d;
+    --ink:             #ededed;
+    --ink-soft:        #c2c2c2;
+    --bevel-light:     #6e6e72;
+    --bevel-face:      #515155;
+    --bevel-dark:      #1c1c1e;
+    --bevel-darker:    #000000;
+    --title-stripe:    #d8d8d8;
+    --menubar-bg:      #1f1f21;
+    --shadow:          rgba(0, 0, 0, 0.7);
+  }
+  body {
+    background-image: repeating-linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      rgba(0, 0, 0, 0.10) 1px,
+      rgba(0, 0, 0, 0.10) 3px
+    );
+  }
+  .window { border-color: #000; }
+  .titlebar { border-bottom-color: #000; }
+  .closebox, .zoombox { border-color: var(--ink); }
+  .zoombox::before { border-color: var(--ink); }
+  .lede code, .note code { background: #1c1c1e; border-color: #000; color: var(--ink); }
+  .note { background: #232325; }
+  .demo-gif { border-color: #000; }
+  .btn-default { outline-color: #000; box-shadow: 0 0 0 1px #000; }
+  .lockup-light { display: none; }
+  .lockup-dark { display: inline-block; }
+}
