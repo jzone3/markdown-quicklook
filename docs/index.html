@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Markdown QuickLook — Render Markdown in macOS Quick Look</title>
+  <meta name="description" content="A tiny macOS Quick Look extension. Select a .md file in Finder, press space, and read it rendered. Free & open source." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- ===== Masthead ===== -->
+  <header class="masthead" id="top">
+    <div class="grid">
+      <div class="masthead__brand">
+        <img class="masthead__icon" src="favicon.png" alt="Markdown QuickLook app icon" width="46" height="46" />
+        <span class="masthead__name">Markdown&nbsp;QuickLook</span>
+      </div>
+      <nav class="masthead__nav" aria-label="Sections">
+        <a href="#what">01&nbsp;What it does</a>
+        <a href="#install">02&nbsp;Install</a>
+        <a href="https://github.com/jzone3/markdown-quicklook">GitHub&nbsp;↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== Hero ===== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="grid">
+        <p class="hero__kicker"><span class="num">00</span> macOS Quick Look extension</p>
+        <h1 class="hero__title" id="hero-title">
+          Render<br />Markdown<br />in <span class="accent">Quick&nbsp;Look</span>.
+        </h1>
+        <p class="hero__subtitle">Render Markdown in macOS Quick Look. Free &amp; open source.</p>
+
+        <div class="hero__body">
+          <p class="lede">
+            A tiny macOS Quick Look extension. Select a <code>.md</code> file in
+            Finder, press space, and read it rendered the way it was meant to look —
+            headings, code, tables and task lists included. No app window, just a
+            menu-bar helper that stays out of the way.
+          </p>
+
+          <div class="cta">
+            <a class="btn" href="https://github.com/jzone3/markdown-quicklook/releases/latest/download/MarkdownQuickLook.dmg">
+              Download MarkdownQuickLook.dmg
+              <span class="btn__arrow" aria-hidden="true">→</span>
+            </a>
+            <p class="meta">
+              <span id="version">macOS 12+ · MIT</span> ·
+              <a href="https://github.com/jzone3/markdown-quicklook">source on GitHub</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Demo ===== -->
+    <section class="demo" aria-labelledby="demo-label">
+      <div class="grid">
+        <p class="section-no" id="demo-label"><span class="num">—</span> Demo</p>
+        <figure class="demo__figure">
+          <img class="demo__img" src="assets/demo.gif" alt="Animated demo: pressing spacebar on a .md file in Finder shows a rendered preview." loading="lazy" />
+          <figcaption class="demo__cap">Spacebar on a .md file in Finder → rendered preview.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== What it does ===== -->
+    <section class="feature" id="what" aria-labelledby="what-title">
+      <div class="grid">
+        <div class="section-head">
+          <span class="section-head__no">01</span>
+          <h2 class="section-head__title" id="what-title">What&nbsp;it&nbsp;does</h2>
+        </div>
+        <ol class="list">
+          <li class="list__item">
+            <span class="list__no">01</span>
+            <div class="list__text">
+              <h3>Rich rendering.</h3>
+              <p>Headings, lists, task lists, blockquotes, links, bold, italic, strikethrough and inline code.</p>
+            </div>
+          </li>
+          <li class="list__item">
+            <span class="list__no">02</span>
+            <div class="list__text">
+              <h3>Syntax-highlighted code.</h3>
+              <p>Fenced code blocks highlighted with a clean GitHub-style theme, light and dark.</p>
+            </div>
+          </li>
+          <li class="list__item">
+            <span class="list__no">03</span>
+            <div class="list__text">
+              <h3>Real tables.</h3>
+              <p>GitHub-flavored Markdown tables render as native AppKit tables — not raw pipes.</p>
+            </div>
+          </li>
+          <li class="list__item">
+            <span class="list__no">04</span>
+            <div class="list__text">
+              <h3>Sandboxed &amp; offline.</h3>
+              <p>Runs in a sandboxed Quick Look extension with no network access. A menu-bar helper, no Dock icon.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== Install ===== -->
+    <section class="install" id="install" aria-labelledby="install-title">
+      <div class="grid">
+        <div class="section-head">
+          <span class="section-head__no">02</span>
+          <h2 class="section-head__title" id="install-title">Install</h2>
+        </div>
+        <ol class="steps">
+          <li class="steps__item">
+            <span class="steps__no">01</span>
+            <div class="steps__text">
+              <h3>Download &amp; open the disk image.</h3>
+              <p>Drag “Markdown QuickLook” into your Applications folder.</p>
+            </div>
+          </li>
+          <li class="steps__item">
+            <span class="steps__no">02</span>
+            <div class="steps__text">
+              <h3>Launch it once.</h3>
+              <p>Open it from Applications. It lives in the menu bar and registers the Quick Look extension.</p>
+            </div>
+          </li>
+          <li class="steps__item">
+            <span class="steps__no">03</span>
+            <div class="steps__text">
+              <h3>Press space.</h3>
+              <p>Select any .md file in Finder and hit space. If an old preview is cached, use the menu-bar item → Reset Quick Look Cache.</p>
+            </div>
+          </li>
+        </ol>
+        <p class="note">
+          <strong>Not notarized yet:</strong> on first launch macOS may say the app
+          is from an unidentified developer. Right-click the app → Open → Open, or run
+          <code>xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app</code>.
+          Prefer building from source? <a href="https://github.com/jzone3/markdown-quicklook#manual-install">See the README.</a>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="grid">
+      <a class="footer__devin" href="https://devin.ai" aria-label="Built by Devin">
+        <span class="footer__devin-label">built by</span>
+        <img class="footer__devin-logo" src="assets/devin-lockup-black.png" alt="Devin" />
+      </a>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="https://github.com/jzone3/markdown-quicklook/blob/master/LICENSE">MIT License</a>
+        <a href="https://github.com/jzone3/markdown-quicklook">GitHub</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    fetch('https://api.github.com/repos/jzone3/markdown-quicklook/releases/latest')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.tag_name) { document.getElementById('version').textContent = d.tag_name + ' · macOS 12+ · MIT'; } })
+      .catch(function () {});
+  </script>
+</body>
+</html>
