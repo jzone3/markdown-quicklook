@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown QuickLook — Render Markdown in macOS Quick Look</title>
+  <meta name="description" content="A tiny macOS Quick Look extension. Select a .md file in Finder, press space, and read it rendered. Free & open source." />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+    <span class="grid"></span>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <img src="favicon.png" alt="Markdown QuickLook icon" width="32" height="32" />
+      <span>Markdown QuickLook</span>
+    </a>
+    <a class="ghost-link" href="https://github.com/jzone3/markdown-quicklook" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="glass hero-card">
+        <div class="hero-icon-wrap">
+          <img class="hero-icon" src="favicon.png" alt="Markdown QuickLook app icon" width="92" height="92" />
+        </div>
+        <h1>Markdown QuickLook</h1>
+        <p class="subtitle">Render Markdown in macOS Quick Look. Free &amp; open source.</p>
+        <p class="lede">A tiny macOS Quick Look extension. Select a <code>.md</code> file in Finder, press space, and read it rendered the way it was meant to look — headings, code, tables and task lists included. No app window, just a menu-bar helper that stays out of the way.</p>
+
+        <div class="cta">
+          <a class="download-btn" href="https://github.com/jzone3/markdown-quicklook/releases/latest/download/MarkdownQuickLook.dmg">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 0 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
+            Download MarkdownQuickLook.dmg
+          </a>
+          <p class="meta"><span id="version">macOS 12+ · MIT</span> · <a href="https://github.com/jzone3/markdown-quicklook" target="_blank" rel="noopener">source on GitHub</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO -->
+    <section class="demo">
+      <figure class="glass demo-frame">
+        <img src="assets/demo.gif" alt="Animated demo: pressing spacebar on a .md file in Finder shows a rendered preview" loading="lazy" />
+        <figcaption>Spacebar on a .md file in Finder → rendered preview.</figcaption>
+      </figure>
+    </section>
+
+    <!-- WHAT IT DOES -->
+    <section class="features">
+      <h2>What it does</h2>
+      <div class="card-grid">
+        <article class="glass feature-card">
+          <h3>Rich rendering.</h3>
+          <p>Headings, lists, task lists, blockquotes, links, bold, italic, strikethrough and inline code.</p>
+        </article>
+        <article class="glass feature-card">
+          <h3>Syntax-highlighted code.</h3>
+          <p>Fenced code blocks highlighted with a clean GitHub-style theme, light and dark.</p>
+        </article>
+        <article class="glass feature-card">
+          <h3>Real tables.</h3>
+          <p>GitHub-flavored Markdown tables render as native AppKit tables — not raw pipes.</p>
+        </article>
+        <article class="glass feature-card">
+          <h3>Sandboxed &amp; offline.</h3>
+          <p>Runs in a sandboxed Quick Look extension with no network access. A menu-bar helper, no Dock icon.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section class="install">
+      <h2>Install</h2>
+      <ol class="steps">
+        <li class="glass step-card">
+          <span class="step-num">1</span>
+          <div>
+            <h3>Download &amp; open the disk image.</h3>
+            <p>Drag “Markdown QuickLook” into your Applications folder.</p>
+          </div>
+        </li>
+        <li class="glass step-card">
+          <span class="step-num">2</span>
+          <div>
+            <h3>Launch it once.</h3>
+            <p>Open it from Applications. It lives in the menu bar and registers the Quick Look extension.</p>
+          </div>
+        </li>
+        <li class="glass step-card">
+          <span class="step-num">3</span>
+          <div>
+            <h3>Press space.</h3>
+            <p>Select any .md file in Finder and hit space. If an old preview is cached, use the menu-bar item → Reset Quick Look Cache.</p>
+          </div>
+        </li>
+      </ol>
+      <p class="glass note">
+        Not notarized yet: on first launch macOS may say the app is from an unidentified developer. Right-click the app → Open → Open, or run
+        <code>xattr -dr com.apple.quarantine /Applications/MarkdownQuickLook.app</code>.
+        Prefer building from source? <a href="https://github.com/jzone3/markdown-quicklook#manual-install" target="_blank" rel="noopener">See the README.</a>
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="built-by" href="https://devin.ai" target="_blank" rel="noopener">
+      <span>built by</span>
+      <img src="assets/devin-lockup-white.png" alt="Devin" height="22" />
+    </a>
+    <nav class="footer-links">
+      <a href="https://github.com/jzone3/markdown-quicklook/blob/master/LICENSE" target="_blank" rel="noopener">MIT License</a>
+      <span class="dot">·</span>
+      <a href="https://github.com/jzone3/markdown-quicklook" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+  </footer>
+
+  <script>
+    fetch('https://api.github.com/repos/jzone3/markdown-quicklook/releases/latest')
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) { if (d && d.tag_name) { document.getElementById('version').textContent = d.tag_name + ' · macOS 12+ · MIT'; } })
+      .catch(function () {});
+  </script>
+</body>
+</html>
