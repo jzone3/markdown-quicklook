@@ -1,0 +1,358 @@
+/* ============================================================
+   Markdown QuickLook — Neobrutalism / Playful landing page
+   Plain hand-written CSS. Light primary, tasteful dark variant.
+   ============================================================ */
+
+:root {
+  --ink: #111111;
+  --paper: #fdf6e3;        /* warm off-white page */
+  --card: #ffffff;
+  --border: #111111;
+  --bw: 3px;               /* thick black border */
+  --shadow: 6px 6px 0 var(--ink);
+  --shadow-sm: 4px 4px 0 var(--ink);
+  --shadow-press: 2px 2px 0 var(--ink);
+  --radius: 16px;
+
+  /* saturated playful palette */
+  --yellow: #ffd84d;
+  --pink:   #ff8fc8;
+  --blue:   #76b6ff;
+  --mint:   #8ff0c8;
+  --accent: #ff5c38;       /* download / hot accent */
+
+  --font: "Helvetica Neue", Helvetica, Arial, -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(var(--ink) 1.4px, transparent 1.4px);
+  background-size: 26px 26px;
+  color: var(--ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+code {
+  font-family: var(--mono);
+  background: var(--yellow);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 0.05em 0.4em;
+  font-size: 0.88em;
+  font-weight: 700;
+}
+
+a { color: var(--ink); }
+.nowrap { white-space: nowrap; }
+
+/* ----------------------------- HERO ----------------------------- */
+.hero { margin-bottom: 34px; }
+
+.hero-card {
+  background: var(--yellow);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 30px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.app-icon {
+  width: 92px;
+  height: 92px;
+  border: var(--bw) solid var(--border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  flex: none;
+}
+
+.title-text h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 7vw, 3.4rem);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 8px 0 0;
+  font-size: clamp(1rem, 3.4vw, 1.25rem);
+  font-weight: 800;
+}
+
+.lede {
+  margin: 6px 0 24px;
+  font-size: 1.06rem;
+  font-weight: 500;
+  max-width: 62ch;
+}
+
+/* CTA */
+.cta { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+
+.btn-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  padding: 16px 26px;
+  border: var(--bw) solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  transition: transform 0.06s ease, box-shadow 0.06s ease;
+}
+.btn-download:hover,
+.btn-download:focus-visible {
+  transform: translate(4px, 4px);
+  box-shadow: var(--shadow-press);
+  outline: none;
+}
+.btn-download:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0 0 0 var(--ink);
+}
+.btn-arrow {
+  font-size: 1.3em;
+  line-height: 1;
+  display: inline-block;
+  animation: bob 1.6s ease-in-out infinite;
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(3px); }
+}
+
+.meta {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.meta a { font-weight: 800; }
+
+/* ----------------------------- DEMO ----------------------------- */
+.demo-section { margin-bottom: 44px; }
+
+.demo-card {
+  margin: 0;
+  background: var(--blue);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 18px 14px;
+  transform: rotate(-1deg);
+}
+.demo-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: var(--bw) solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+}
+.demo-card figcaption {
+  margin-top: 12px;
+  font-weight: 800;
+  text-align: center;
+  font-size: 0.98rem;
+}
+
+/* --------------------------- SECTIONS --------------------------- */
+.section-heading {
+  margin: 0 0 22px;
+  text-align: center;
+}
+.heading-tag {
+  display: inline-block;
+  background: var(--pink);
+  border: var(--bw) solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  padding: 8px 22px;
+  font-size: clamp(1.3rem, 5vw, 1.9rem);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  transform: rotate(-1.5deg);
+}
+.heading-tag.tag-blue { background: var(--mint); transform: rotate(1.5deg); }
+
+/* features */
+.features { margin-bottom: 48px; }
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.feature-card {
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 22px;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.feature-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+.feature-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+.feature-card p { margin: 0; font-weight: 500; }
+
+.c-yellow { background: var(--yellow); }
+.c-pink   { background: var(--pink); }
+.c-blue   { background: var(--blue); }
+.c-mint   { background: var(--mint); }
+
+/* install */
+.install { margin-bottom: 48px; }
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  background: var(--card);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+}
+.step-num {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  color: #fff;
+  border: var(--bw) solid var(--border);
+  border-radius: 12px;
+  font-size: 1.4rem;
+  font-weight: 900;
+  box-shadow: var(--shadow-sm);
+}
+.step-body h3 { margin: 2px 0 6px; font-size: 1.12rem; font-weight: 900; }
+.step-body p { margin: 0; font-weight: 500; }
+
+.note {
+  margin-top: 22px;
+  background: var(--mint);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 18px 20px;
+  font-weight: 500;
+  font-size: 0.96rem;
+}
+.note strong { font-weight: 900; }
+
+/* footer */
+.footer {
+  background: var(--card);
+  border: var(--bw) solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  text-align: center;
+}
+.devin-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.built-by { font-size: 1.05rem; }
+.lockup-img { display: block; }
+.lockup-dark { display: none; }
+
+.footer-links {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.92rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+.footer-links a { font-weight: 800; }
+.dot { opacity: 0.5; }
+
+/* ----------------------------- RESPONSIVE ----------------------------- */
+@media (max-width: 640px) {
+  .page { padding: 20px 14px 48px; }
+  .hero-card { padding: 24px 20px; }
+  .title-row { gap: 14px; }
+  .app-icon { width: 66px; height: 66px; border-radius: 16px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .btn-download { font-size: 1.02rem; padding: 14px 20px; width: 100%; justify-content: center; }
+  .demo-card { transform: none; }
+}
+
+/* ----------------------------- DARK MODE ----------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink: #000000;
+    --paper: #1b1b1f;
+    --card: #2a2a31;
+  }
+  body {
+    color: #f4f4f5;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 1.4px, transparent 1.4px);
+  }
+  /* keep hard black borders/shadows — that's the neobrutalist look */
+  .hero-card, .feature-card, .demo-card, .step, .note, .heading-tag,
+  .footer, .app-icon, .step-num, .btn-download, code {
+    border-color: #000;
+  }
+  /* colored blocks stay vivid; text on them stays dark for contrast */
+  .hero-card, .demo-card, .feature-card, .heading-tag, .note { color: #111; }
+  .hero-card a, .heading-tag, .feature-card a, .note a { color: #111; }
+  code { color: #111; }
+
+  /* neutral cards adapt to dark surface with light text */
+  .step, .footer { color: #f4f4f5; }
+  .step a, .footer a, .footer .built-by { color: #f4f4f5; }
+  .step-body p, .footer-links a { color: #f4f4f5; }
+
+  .lockup-light { display: none; }
+  .lockup-dark { display: block; }
+
+  a { color: #f4f4f5; }
+}
