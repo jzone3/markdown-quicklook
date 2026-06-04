@@ -188,17 +188,6 @@ code, .ic {
   padding: 0.5px 5px;
 }
 
-.callout {
-  font-family: var(--serif-ui);
-  font-size: 14px;
-  color: var(--muted);
-  border-left: 3px solid var(--line);
-  padding: 2px 0 2px 14px;
-  margin: 16px 0 0;
-  max-width: 40rem;
-}
-.callout code { font-size: 0.85em; }
-
 /* ---------- Footer ---------- */
 footer {
   margin-top: 40px;
