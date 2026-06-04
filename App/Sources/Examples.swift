@@ -1,8 +1,10 @@
 import AppKit
 
 /// Deploys the example Markdown files that ship inside the app bundle to a
-/// writable folder and reveals it in Finder, so the user can press the spacebar
-/// on them. Shared by the setup window's button and the menu-bar menu.
+/// "Markdown QuickLook Examples" folder in the user's Downloads and reveals it
+/// in Finder, so the user can press the spacebar on them. Shared by the setup
+/// window's button and the menu-bar menu. (Requires the
+/// com.apple.security.files.downloads.read-write sandbox entitlement.)
 enum Examples {
     static func open() {
         let fileManager = FileManager.default
@@ -15,7 +17,7 @@ enum Examples {
 
         do {
             let destination = try fileManager.url(
-                for: .applicationSupportDirectory,
+                for: .downloadsDirectory,
                 in: .userDomainMask,
                 appropriateFor: nil,
                 create: true

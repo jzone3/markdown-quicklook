@@ -26,9 +26,15 @@ struct ContentView: View {
             .controlSize(.large)
             .buttonStyle(.borderedProminent)
 
-            Text("Then press the spacebar on any example to try it.")
+            Text("Creates an examples folder in your Downloads — press the spacebar on any file to preview it.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+
+            Text("Markdown QuickLook lives in your menu bar and starts automatically at login.")
+                .font(.footnote)
+                .foregroundStyle(.tertiary)
+                .multilineTextAlignment(.center)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(48)

@@ -1,5 +1,6 @@
 import SwiftUI
 import AppKit
+import ServiceManagement
 
 @main
 struct MarkdownQuickLookApp: App {
@@ -19,8 +20,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         // Menu-bar utility: no Dock icon, lives in the status bar.
         NSApp.setActivationPolicy(.accessory)
+        registerLoginItemOnFirstLaunch()
         setUpStatusItem()
         showMainWindow()
+    }
+
+    /// Start the app automatically at login. Only registered on first launch so
+    /// a user who later turns it off in System Settings stays opted out.
+    private func registerLoginItemOnFirstLaunch() {
+        let key = "didRegisterLoginItem"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        if #available(macOS 13.0, *) {
+            try? SMAppService.mainApp.register()
+        }
+        UserDefaults.standard.set(true, forKey: key)
     }
 
     // Re-open the setup window if the user launches the app again.
