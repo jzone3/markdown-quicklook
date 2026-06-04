@@ -117,19 +117,10 @@ xcodebuild \
 
 ## Landing page
 
-The download page source lives in [`docs/`](docs/). It is deployed by the
-[`Deploy landing page`](.github/workflows/pages.yml) workflow using the official
-GitHub Actions Pages deployment on every push to `master` that touches `docs/`
-(and on manual dispatch).
-
-No manual setup is required: the workflow's first run auto-enables Pages via the
-Actions token (`actions/configure-pages` with `enablement: true`), then publishes
-`docs/`. The site goes live at https://jzone3.github.io/markdown-quicklook/.
-
-> If your org restricts the Actions `GITHUB_TOKEN` (Settings → Actions → General →
-> Workflow permissions set to read-only), the auto-enable step can't run. Either
-> set workflow permissions to read/write, or flip Pages on once under
-> **Settings → Pages → Source = "GitHub Actions"**.
+The landing page (https://quicklookmd.com) is **not** part of this branch. Its
+source is maintained separately on the [`gh-pages`](https://github.com/jzone3/markdown-quicklook/tree/gh-pages)
+branch, which GitHub Pages serves directly. `master` is kept clean as the
+buildable open-source project. See `AGENTS.md` for details.
 
 ## How it works
 
