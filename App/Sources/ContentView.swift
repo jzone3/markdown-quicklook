@@ -3,104 +3,67 @@ import AppKit
 
 struct ContentView: View {
     var body: some View {
-        HSplitView {
-            instructions
-                .frame(minWidth: 300, idealWidth: 340, maxWidth: 420)
-            MarkdownWebView(markdown: ContentView.demoMarkdown)
-                .frame(minWidth: 380)
-        }
-    }
+        VStack(spacing: 22) {
+            Image(nsImage: NSApp.applicationIconImage)
+                .resizable()
+                .frame(width: 96, height: 96)
+                .shadow(radius: 10, y: 4)
 
-    private var instructions: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text("Markdown QuickLook")
+            VStack(spacing: 10) {
+                Text("Markdown QuickLook is set up")
                     .font(.largeTitle.bold())
-                Text("Press the spacebar on a Markdown file in Finder to see it rendered as styled HTML instead of plain text.")
+                Text("Select a Markdown file in Finder and press the spacebar to preview it.")
+                    .font(.title3)
                     .foregroundStyle(.secondary)
-
-                Divider()
-
-                Text("Enable the extension")
-                    .font(.headline)
-                stepsList
-
-                Button {
-                    openExtensionsSettings()
-                } label: {
-                    Label("Open Extensions Settings", systemImage: "gearshape")
-                }
-                .controlSize(.large)
-
-                Divider()
-
-                Text("If a preview doesn't update, run `qlmanage -r` in Terminal to reset the Quick Look cache, or log out and back in.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .textSelection(.enabled)
-
-                Spacer(minLength: 0)
+                    .multilineTextAlignment(.center)
             }
-            .padding(24)
-        }
-    }
 
-    private var stepsList: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            step(1, "Build and run this app once so macOS registers the extension.")
-            step(2, "Open System Settings → General → Login Items & Extensions → Quick Look (on macOS 13–14: System Settings → Privacy & Security → Extensions → Quick Look).")
-            step(3, "Turn on “Markdown Preview”.")
-            step(4, "Select any .md file in Finder and press the spacebar.")
-        }
-    }
-
-    private func step(_ number: Int, _ text: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
-            Text("\(number)")
-                .font(.callout.monospacedDigit().bold())
-                .frame(width: 22, height: 22)
-                .background(Circle().fill(Color.accentColor.opacity(0.18)))
-            Text(text)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private func openExtensionsSettings() {
-        // Opens the Extensions pane in System Settings.
-        let candidates = [
-            "x-apple.systempreferences:com.apple.ExtensionsPreferences",
-            "x-apple.systempreferences:com.apple.preference.security?Extensions"
-        ]
-        for string in candidates {
-            if let url = URL(string: string), NSWorkspace.shared.open(url) {
-                return
+            Button {
+                openExamples()
+            } label: {
+                Label("Open Example Files", systemImage: "folder")
             }
+            .controlSize(.large)
+            .buttonStyle(.borderedProminent)
+
+            Text("Then press the spacebar on any example to try it.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(48)
+    }
+
+    /// Copy the example Markdown files bundled inside the app to a writable
+    /// folder, then reveal that folder in Finder so the user can press the
+    /// spacebar on them.
+    private func openExamples() {
+        let fileManager = FileManager.default
+
+        guard let bundled = Bundle.main.resourceURL?.appendingPathComponent("Examples", isDirectory: true),
+              fileManager.fileExists(atPath: bundled.path) else {
+            NSSound.beep()
+            return
+        }
+
+        do {
+            let destination = try fileManager.url(
+                for: .applicationSupportDirectory,
+                in: .userDomainMask,
+                appropriateFor: nil,
+                create: true
+            ).appendingPathComponent("Markdown QuickLook Examples", isDirectory: true)
+
+            try? fileManager.removeItem(at: destination)
+            try fileManager.createDirectory(at: destination, withIntermediateDirectories: true)
+            for item in try fileManager.contentsOfDirectory(at: bundled, includingPropertiesForKeys: nil) {
+                try fileManager.copyItem(at: item, to: destination.appendingPathComponent(item.lastPathComponent))
+            }
+
+            NSWorkspace.shared.open(destination)
+        } catch {
+            // Fall back to revealing the read-only bundled folder.
+            NSWorkspace.shared.open(bundled)
         }
     }
-
-    static let demoMarkdown = """
-    # Markdown QuickLook
-
-    This is a **live preview** rendered by the same engine the Quick Look
-    extension uses.
-
-    ## Features
-
-    - GitHub-flavored Markdown (tables, task lists, strikethrough)
-    - Syntax-highlighted code blocks
-    - Automatic light / dark appearance
-
-    ```swift
-    func greet(_ name: String) -> String {
-        return "Hello, \\(name)!"
-    }
-    ```
-
-    | Element | Supported |
-    | :------ | :-------: |
-    | Tables  |    yes    |
-    | Images  |    yes    |
-
-    > Press the spacebar on a `.md` file in Finder to try it for real.
-    """
 }

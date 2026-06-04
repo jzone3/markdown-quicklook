@@ -47,6 +47,11 @@ targets:
     sources:
       - path: App/Sources
       - path: App/Resources
+      # Ship the example Markdown files as a folder reference so they land at
+      # Contents/Resources/Examples inside the app bundle.
+      - path: App/Examples
+        type: folder
+        buildPhase: resources
     dependencies:
       - package: MarkdownQuickLook
         product: MarkdownRenderer

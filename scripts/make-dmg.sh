@@ -113,11 +113,11 @@ make_styled_dmg() {
     --volname "${APP_NAME}" \
     --background "$BG" \
     --window-pos 200 120 \
-    --window-size 660 400 \
+    --window-size 660 480 \
     --icon-size 120 \
-    --icon "${APP_NAME}.app" 165 235 \
+    --icon "${APP_NAME}.app" 165 290 \
     --hide-extension "${APP_NAME}.app" \
-    --app-drop-link 495 235 \
+    --app-drop-link 495 290 \
     --no-internet-enable \
     "$OUT_DMG" \
     "$STAGING"
