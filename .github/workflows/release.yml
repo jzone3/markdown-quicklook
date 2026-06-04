@@ -98,14 +98,24 @@ jobs:
         if: ${{ env.AC_API_KEY_P8_BASE64 != '' && env.MACOS_CERTIFICATE_P12_BASE64 != '' }}
         run: |
           set -euo pipefail
-          echo "$AC_API_KEY_P8_BASE64" | base64 --decode > "$RUNNER_TEMP/AuthKey.p8"
+          KEY="$RUNNER_TEMP/AuthKey.p8"
+          echo "$AC_API_KEY_P8_BASE64" | base64 --decode > "$KEY"
+          AUTH=(--key "$KEY" --key-id "$AC_API_KEY_ID" --issuer "$AC_API_ISSUER_ID")
           echo "==> Submitting for notarization (this can take a few minutes)"
-          xcrun notarytool submit "$DMG" \
-            --key "$RUNNER_TEMP/AuthKey.p8" \
-            --key-id "$AC_API_KEY_ID" \
-            --issuer "$AC_API_ISSUER_ID" \
-            --wait
-          rm -f "$RUNNER_TEMP/AuthKey.p8"
+          OUT="$RUNNER_TEMP/notary.json"
+          set +e
+          xcrun notarytool submit "$DMG" "${AUTH[@]}" --wait --output-format json | tee "$OUT"
+          set -e
+          SUB_ID=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("id",""))' "$OUT" || true)
+          STATUS=$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1])).get("status",""))' "$OUT" || true)
+          echo "==> Notarization status: ${STATUS:-unknown} (id ${SUB_ID:-none})"
+          if [ "$STATUS" != "Accepted" ]; then
+            echo "==> Detailed notary log:"
+            [ -n "$SUB_ID" ] && xcrun notarytool log "$SUB_ID" "${AUTH[@]}" || true
+            rm -f "$KEY"
+            exit 1
+          fi
+          rm -f "$KEY"
           echo "==> Stapling notarization ticket"
           xcrun stapler staple "$DMG"
           xcrun stapler validate "$DMG"

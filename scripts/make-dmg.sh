@@ -35,6 +35,14 @@ xcodegen generate
 SIGN_IDENTITY="${CODE_SIGN_IDENTITY:--}"
 TEAM="${DEVELOPMENT_TEAM:-}"
 
+# When signing with a real Developer ID identity, notarization requires a secure
+# timestamp on every signature. Add --timestamp for real identities only (an
+# ad-hoc "-" signature can't be timestamped and doesn't need to be).
+EXTRA_SIGN_FLAGS=()
+if [[ "$SIGN_IDENTITY" != "-" ]]; then
+  EXTRA_SIGN_FLAGS+=("OTHER_CODE_SIGN_FLAGS=--timestamp")
+fi
+
 echo "==> Building ${APP_NAME} (${CONFIGURATION}); signing identity: ${SIGN_IDENTITY:-ad-hoc}"
 xcodebuild \
   -project "${APP_NAME}.xcodeproj" \
@@ -46,6 +54,7 @@ xcodebuild \
   CODE_SIGN_IDENTITY="${SIGN_IDENTITY}" \
   DEVELOPMENT_TEAM="${TEAM}" \
   PROVISIONING_PROFILE_SPECIFIER= \
+  ${EXTRA_SIGN_FLAGS[@]+"${EXTRA_SIGN_FLAGS[@]}"} \
   build
 
 APP_PATH="$DERIVED/Build/Products/${CONFIGURATION}/${APP_NAME}.app"
