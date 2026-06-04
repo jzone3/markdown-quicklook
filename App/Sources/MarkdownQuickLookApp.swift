@@ -6,22 +6,106 @@ struct MarkdownQuickLookApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
-        WindowGroup("Markdown QuickLook") {
-            ContentView()
-                .frame(minWidth: 560, idealWidth: 600, minHeight: 470, idealHeight: 510)
-        }
+        // The UI is driven entirely by the AppDelegate (a menu-bar status item
+        // plus a setup window), so this scene is just a required placeholder.
+        Settings { EmptyView() }
     }
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    private var statusItem: NSStatusItem?
+    private var window: NSWindow?
+
     func applicationDidFinishLaunching(_ notification: Notification) {
-        // Show as a normal windowed app and bring the window to the front so the
-        // setup-confirmation screen appears when the user opens the app.
-        NSApp.setActivationPolicy(.regular)
+        // Menu-bar utility: no Dock icon, lives in the status bar.
+        NSApp.setActivationPolicy(.accessory)
+        setUpStatusItem()
+        showMainWindow()
+    }
+
+    // Re-open the setup window if the user launches the app again.
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        showMainWindow()
+        return true
+    }
+
+    // MARK: - Status bar
+
+    private func setUpStatusItem() {
+        let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        item.button?.image = NSImage(systemSymbolName: "doc.text.magnifyingglass", accessibilityDescription: "Markdown QuickLook")
+        item.button?.imagePosition = .imageLeading
+        item.button?.title = "Markdown"
+        item.menu = makeMenu()
+        statusItem = item
+    }
+
+    private func makeMenu() -> NSMenu {
+        let menu = NSMenu()
+        menu.addItem(NSMenuItem(title: "Open Example Files", action: #selector(openExamples), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Open Markdown QuickLook", action: #selector(showWindow), keyEquivalent: ""))
+        menu.addItem(.separator())
+        menu.addItem(NSMenuItem(title: "Open Extensions Settings", action: #selector(openExtensionsSettings), keyEquivalent: ""))
+        menu.addItem(NSMenuItem(title: "Reset Quick Look Cache", action: #selector(resetQuickLookCache), keyEquivalent: ""))
+        menu.addItem(.separator())
+        menu.addItem(NSMenuItem(title: "Quit Markdown QuickLook", action: #selector(quit), keyEquivalent: "q"))
+        menu.items.forEach { $0.target = self }
+        return menu
+    }
+
+    // MARK: - Window
+
+    private func showMainWindow() {
+        if window == nil {
+            let hosting = NSHostingController(rootView: ContentView())
+            let win = NSWindow(contentViewController: hosting)
+            win.title = "Markdown QuickLook"
+            win.styleMask = [.titled, .closable, .miniaturizable]
+            win.setContentSize(NSSize(width: 600, height: 510))
+            win.isReleasedWhenClosed = false
+            win.center()
+            window = win
+        }
+        window?.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
     }
 
-    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        true
+    // MARK: - Actions
+
+    @objc private func openExamples() {
+        Examples.open()
+    }
+
+    @objc private func showWindow() {
+        showMainWindow()
+    }
+
+    @objc private func openExtensionsSettings() {
+        let candidates = [
+            "x-apple.systempreferences:com.apple.LoginItems-Settings.extension",
+            "x-apple.systempreferences:com.apple.ExtensionsPreferences",
+            "x-apple.systempreferences:com.apple.preference.security?Extensions"
+        ]
+        for string in candidates {
+            if let url = URL(string: string), NSWorkspace.shared.open(url) {
+                return
+            }
+        }
+    }
+
+    @objc private func resetQuickLookCache() {
+        run("/usr/bin/qlmanage", ["-r"])
+        run("/usr/bin/qlmanage", ["-r", "cache"])
+    }
+
+    @objc private func quit() {
+        NSApp.terminate(nil)
+    }
+
+    private func run(_ launchPath: String, _ arguments: [String]) {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: launchPath)
+        process.arguments = arguments
+        try? process.run()
     }
 }
