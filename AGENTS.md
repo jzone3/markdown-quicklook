@@ -12,6 +12,21 @@ This repo builds a macOS Quick Look preview extension for Markdown files.
 - The command-line renderer is `Sources/mdql/`.
 - Tests live in `Tests/MarkdownRendererTests/`.
 
+## Website / landing page (important)
+
+The public landing page at https://quicklookmd.com is **not** part of `master`.
+
+- `master` is kept clean as the open-source, buildable project. It contains no
+  website source. Do **not** add a `docs/` folder or a Pages-deploy workflow back
+  to `master`.
+- The landing page (`index.html`, `styles.css`, `assets/`, `CNAME`, `favicon.png`)
+  lives only on the [`gh-pages`](https://github.com/jzone3/markdown-quicklook/tree/gh-pages)
+  branch. GitHub Pages serves that branch directly (Settings → Pages →
+  Source = "Deploy from a branch: gh-pages"), which is why the `CNAME` for the
+  custom domain lives there.
+- To change the website, edit and commit on the `gh-pages` branch. Changes go
+  live on push — there is no separate build step and nothing to mirror.
+
 ## Install guidance
 
 For end-user install work, follow `agent-instructions/INSTALL.md`. Prefer asking Devin or another coding agent to run those steps because local signing, extension registration, and Quick Look cache resets are easy to get wrong manually.
