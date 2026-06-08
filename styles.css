@@ -197,9 +197,9 @@ footer {
   font-size: 13px;
   color: var(--muted);
 }
-.built { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--muted); }
+.built { display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: var(--muted); font-size: 15px; }
 .built:hover { color: var(--fg); }
-.built img { height: 20px; width: auto; display: block; }
+.built img { height: 26px; width: auto; display: block; }
 .built img.dark-only { display: none; }
 @media (prefers-color-scheme: dark) {
   .built img.light-only { display: none; }
