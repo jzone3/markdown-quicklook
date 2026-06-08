@@ -5,6 +5,14 @@ Look works, the modern way to extend it, the open-source projects we learned fro
 (and their licenses), the Markdown rendering libraries we evaluated, and the
 architecture we chose.
 
+> **Update (post-implementation):** the original plan below rendered HTML into a
+> `WKWebView` inside the Quick Look extension. In practice, WebKit helper
+> processes proved unreliable inside the Quick Look extension sandbox, so the
+> shipped extension renders Markdown natively with AppKit
+> (`NSAttributedString` + `NSTextTable` in an `NSTextView`). The
+> `MarkdownRenderer` HTML pipeline described here still exists and powers the
+> `mdql` CLI. The WKWebView discussion is kept as historical context.
+
 ---
 
 ## 1. How macOS Quick Look works
