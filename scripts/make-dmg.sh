@@ -70,6 +70,23 @@ rm -rf "$STAGING"
 mkdir -p "$STAGING"
 cp -R "$APP_PATH" "$STAGING/"
 
+make_applications_alias() {
+  rm -f "$STAGING/Applications"
+  if ! osascript - "$STAGING" <<'APPLESCRIPT'
+on run argv
+  set stagingPath to item 1 of argv
+  tell application "Finder"
+    make new alias file to POSIX file "/Applications" at POSIX file stagingPath with properties {name:"Applications"}
+  end tell
+end run
+APPLESCRIPT
+  then
+    ln -s /Applications "$STAGING/Applications"
+  fi
+}
+
+make_applications_alias
+
 rm -f "$OUT_DMG"
 
 # A nice disk image shows a background with an arrow from the app to the
@@ -84,7 +101,6 @@ BG_2X="$ASSETS/dmg-background@2x.png"
 make_plain_dmg() {
   echo "==> Creating plain disk image (fallback): $OUT_DMG"
   rm -f "$OUT_DMG"
-  ln -sf /Applications "$STAGING/Applications"
   hdiutil create \
     -volname "${APP_NAME}" \
     -srcfolder "$STAGING" \
@@ -92,7 +108,6 @@ make_plain_dmg() {
     -fs HFS+ \
     -format UDZO \
     "$OUT_DMG"
-  rm -f "$STAGING/Applications"
 }
 
 make_styled_dmg() {
@@ -107,8 +122,6 @@ make_styled_dmg() {
   fi
 
   echo "==> Creating styled disk image: $OUT_DMG"
-  # create-dmg adds the /Applications drop link itself, so the staging folder
-  # must contain only the .app.
   create-dmg \
     --volname "${APP_NAME}" \
     --background "$BG" \
@@ -116,8 +129,8 @@ make_styled_dmg() {
     --window-size 660 480 \
     --icon-size 120 \
     --icon "${APP_NAME}.app" 165 290 \
+    --icon "Applications" 495 290 \
     --hide-extension "${APP_NAME}.app" \
-    --app-drop-link 495 290 \
     --no-internet-enable \
     "$OUT_DMG" \
     "$STAGING"

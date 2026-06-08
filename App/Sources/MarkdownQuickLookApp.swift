@@ -3,13 +3,15 @@ import AppKit
 import ServiceManagement
 
 @main
-struct MarkdownQuickLookApp: App {
-    @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+enum MarkdownQuickLookApplication {
+    private static var appDelegate: AppDelegate?
 
-    var body: some Scene {
-        // The UI is driven entirely by the AppDelegate (a menu-bar status item
-        // plus a setup window), so this scene is just a required placeholder.
-        Settings { EmptyView() }
+    static func main() {
+        let app = NSApplication.shared
+        let delegate = AppDelegate()
+        app.delegate = delegate
+        appDelegate = delegate
+        app.run()
     }
 }
 
@@ -21,6 +23,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Menu-bar utility: no Dock icon, lives in the status bar.
         NSApp.setActivationPolicy(.accessory)
         registerLoginItemOnFirstLaunch()
+        enableQuickLookExtensionOnFirstLaunch()
         setUpStatusItem()
         showMainWindow()
     }
@@ -33,6 +36,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if #available(macOS 13.0, *) {
             try? SMAppService.mainApp.register()
         }
+        UserDefaults.standard.set(true, forKey: key)
+    }
+
+    private func enableQuickLookExtensionOnFirstLaunch() {
+        let key = "didAttemptQuickLookExtensionEnable"
+        guard !QuickLookExtensionManager.isRunningFromDiskImage else { return }
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+        QuickLookExtensionManager.enable()
         UserDefaults.standard.set(true, forKey: key)
     }
 
@@ -93,32 +104,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         showMainWindow()
     }
 
-    @objc private func openExtensionsSettings() {
-        let candidates = [
-            "x-apple.systempreferences:com.apple.LoginItems-Settings.extension",
-            "x-apple.systempreferences:com.apple.ExtensionsPreferences",
-            "x-apple.systempreferences:com.apple.preference.security?Extensions"
-        ]
-        for string in candidates {
-            if let url = URL(string: string), NSWorkspace.shared.open(url) {
-                return
-            }
-        }
+    @objc func openExtensionsSettings() {
+        QuickLookExtensionManager.openExtensionsSettings()
     }
 
     @objc private func resetQuickLookCache() {
-        run("/usr/bin/qlmanage", ["-r"])
-        run("/usr/bin/qlmanage", ["-r", "cache"])
+        QuickLookExtensionManager.resetQuickLookCache()
     }
 
     @objc private func quit() {
         NSApp.terminate(nil)
     }
 
-    private func run(_ launchPath: String, _ arguments: [String]) {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: launchPath)
-        process.arguments = arguments
-        try? process.run()
-    }
 }
