@@ -85,7 +85,25 @@ APPLESCRIPT
   fi
 }
 
+# Finder on some macOS versions fails to resolve symlinks/aliases to
+# /Applications inside a mounted disk image and draws a blank placeholder
+# instead of the folder icon. Bake the Applications folder icon directly into
+# the alias file (custom icon resource + Finder custom-icon flag) so it always
+# renders, regardless of resolution. The alias still works as a drop target.
+bake_applications_icon() {
+  swift - "$STAGING/Applications" <<'SWIFT' || echo "warning: could not bake Applications icon (continuing)" >&2
+import AppKit
+let target = CommandLine.arguments[1]
+let icon = NSWorkspace.shared.icon(forFile: "/Applications")
+guard NSWorkspace.shared.setIcon(icon, forFile: target, options: []) else {
+    FileHandle.standardError.write(Data("setIcon failed for \(target)\n".utf8))
+    exit(1)
+}
+SWIFT
+}
+
 make_applications_alias
+bake_applications_icon
 
 rm -f "$OUT_DMG"
 
