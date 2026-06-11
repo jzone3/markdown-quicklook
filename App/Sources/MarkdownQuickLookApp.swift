@@ -58,8 +58,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func setUpStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         item.button?.image = NSImage(systemSymbolName: "doc.text.magnifyingglass", accessibilityDescription: "Markdown QuickLook")
-        item.button?.imagePosition = .imageLeading
-        item.button?.title = "Markdown"
+        item.button?.imagePosition = .imageOnly
         item.menu = makeMenu()
         statusItem = item
     }
